@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<HTML lang="en">
+<HEAD>
+    <title>{% block title %}base{% endblock %}</title>
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">    
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/lib/bootstrap.min.css">
+    <script src="/lib/jquery-1.12.2.min.js"></script>
+    <script src="/lib/bootstrap.min.js"></script>
+    
+    {% block script %}{% endblock %}
+    <style>
+        body {
+          background-color: #333; /* Fond sombre pour le corps */
+          color: #fff; /* Texte en couleur blanche */
+        }
+      
+        .navbar {
+          background-color: #222; /* Fond sombre pour la barre de navigation */
+        }
+      
+        .btn {
+          background-color: #444; /* Boutons avec un fond sombre */
+          color: #fff; /* Texte en couleur blanche pour les boutons */
+          border: none; /* Supprimer les bordures des boutons pour un look épuré */
+        }
+      
+        .btn:hover {
+          background-color: #555; /* Légère variation de couleur au survol des boutons */
+        }
+      
+        .programme-title {
+          font-size:small;
+          font-weight: bolder;
+          text-align: left;          
+        }
+        
+        .programme-property {
+          font-size: x-small;
+          color:gray;
+          text-align: right;
+          margin-bottom: 0;          
+        }
+
+        .programme-property-strong{
+          font-size:x-small;
+          color:lightgray;
+          text-align: right;
+          margin-bottom: 0;
+          font-weight: bolder;
+        }
+
+</style>
+
+</HEAD>
+<BODY style="margin: 10px;">
+    <div class="container bg-dark text-light">
+        {% block content %}{% endblock %}
+    </div>
+</BODY>
+</HTML>

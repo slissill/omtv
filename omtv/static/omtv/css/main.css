@@ -1,0 +1,32 @@
+body
+{
+    background-color:burlywood;
+    color: blue;
+    margin: 0;
+    padding: 0;
+    width: 1000px;   /* 800px */
+}
+
+/* Style du bandeau supérieur */
+.top-banner {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Style du bandeau latéral */
+.sidebar {
+    background-color: #f0f0f0;
+    float: left;
+    width: 50px;    
+    height: 100vh;   /* height: 100%; */
+    padding: 10px;
+}
+
+/* Style du contenu de la page */
+.content {
+    margin-left: 220px; /* Prend en compte la largeur du bandeau latéral */
+    padding: 20px;
+}
+

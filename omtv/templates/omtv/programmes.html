@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}OMTV{% endblock %}
+
+{% block content %}
+
+    {% if view == "accordeon" %}
+
+        {% for item in programmes %} 
+            {% include './programme_item.html' with item=item %}
+        {% endfor %}
+
+    {% else %}
+
+        {% include './programme_table.html' with item=item %}
+
+    {% endif %}
+    
+{% endblock %}

@@ -1,0 +1,70 @@
+{% load static %}
+
+<style>
+    table {
+        width: 100%; /* La table prend 100% de la largeur disponible */
+        border-collapse: collapse; /* Fusionner les bordures de cellules */
+    }
+
+    th, td {
+        border: 1px solid black; /* Bordures pour les cellules */
+        padding: 2px; /* Espacement interne */
+        text-align: center; /* Centrer le contenu */
+        vertical-align: middle;
+    }
+</style>
+
+<table>
+
+    <colgroup>
+        <col style="width: 50px;">
+        <col style="width: 200px;">
+        <col style="width: 60px;">
+
+        <col style="width: 20px;">
+        <col style="width: 20px;">
+        <col style="width: 20px;">
+
+        <col style="width: 500px;">
+        <col style="width: 200px;">
+    </colgroup>
+
+    <thead>
+        <tr>
+            <th>Channel</th>
+            <th>Title</th>
+            <th>Genre</th>
+
+            <th>Debut</th>
+            <th>Fin</th>
+            <th>Durée</th>
+            
+            <th>Description</th>
+            <th>Image</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item in programmes %}
+        <tr>                    
+            <td>
+                <img
+                src="{{ item.channel_image }}"
+                alt="{{ item.channel }}" 
+                title="{{ item.channel }}"
+                height="50px"
+                >
+            </td>
+            <td>{{ item.title }}</td>
+            <td>{{ item.genre }}</td>
+            
+            <td>{{ item.hdeb }}</td>
+            <td>{{ item.hfin }}</td>
+            <td>{{ item.duree }}</td>
+            
+            <td  style="width: 600px;">{{ item.description }}</td>
+            <td><img src="{{item.image}}" height="50px"></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
