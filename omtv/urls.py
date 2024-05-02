@@ -22,12 +22,16 @@ Attention il faut les installer dans la VM active
 pip install mysqlclient
 pip install requests
 
+Obtenir les dépendances
+pip freeze > requirements.txt
 
 ************************************************************
 ******* SERVER  ********************************************
 ************************************************************
 CD C:\ZDEPOT\omtv\
 python manage.py runserver
+
+
 
 
 #************************************************************
