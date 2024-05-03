@@ -1,8 +1,14 @@
 from django.urls import path
 from . import views
+
+app_name = "omtv"
+
 urlpatterns = [
-    path('', views.index, name='home'),
-    path('programmes', views.programmes, name='programmes'),
+    path('', views.home, name='home'),
+    path('programmes', views.programmes_s, name='programmes'),
+    path('programmes_s', views.programmes_s, name='programmes_s'),
+    path('programmes_r', views.programmes_r, name='programmes_r'),
+    path('programmes_u', views.programmes_u, name='programmes_u'),
 ]
 
 

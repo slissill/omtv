@@ -4,6 +4,26 @@
 
 {% block content %}
 
+<table>
+    <tr>
+        <td>
+            <a href ="{% url 'omtv:home' %}">HOME</a>
+        </td>
+        <td>
+            <a href ="{% url 'omtv:programmes_s' %}">Static</a>
+        </td>
+        <td>
+            <a href ="{% url 'omtv:programmes_r' %}">Resquests</a>
+        </td>
+        <td>
+            <a href ="{% url 'omtv:programmes_u' %}">urllib.Requests</a>
+        </td>
+    </tr>
+
+</table>
+
+
+
     {% if view == "accordeon" %}
 
         {% for item in programmes %} 
