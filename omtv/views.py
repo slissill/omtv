@@ -1,19 +1,21 @@
 import requests  #pip install requests
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from .utils import get_programmes
+from .utils import maj_db
+from .models import Programme
+
+#return HttpResponse("update_db_r") 
+
 
 def home(request):    
-    #return HttpResponse("Hello World")
     return render(request, 'omtv/home.html')
 
-def programmes(request):    return do_programmes (request, "s")
-def programmes_s(request):  return do_programmes (request, "s")
-def programmes_r(request):  return do_programmes (request, "r")
-def programmes_u(request):  return do_programmes (request, "u")
+def update_db(request):  
+    maj_db (request.GET.get('mode', 's'))
+    return redirect ("omtv:programmes")
+    
 
-def do_programmes(request, methode):
-    programmes = get_programmes(methode)    
-    context = {"programmes" : programmes, 
+def programmes(request):
+    context = {"programmes" : Programme.objects.order_by('start'), 
                "view" : request.GET.get('view', 'accordeon')}
     return render(request, 'omtv/programmes.html', context)

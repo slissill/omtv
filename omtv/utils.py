@@ -2,10 +2,8 @@ import os
 import requests
 import xml.etree.ElementTree as ET
 from datetime import datetime, date
-from .models import Programme
+from .models import cls_programme, Channel , Programme
 from django.conf import settings
-
-
 import urllib.request
 
 
@@ -31,54 +29,63 @@ def get_channels(root):
     dic_channels = {}
     items = root.findall('.//channel')
     for item in items:
+
+        channel_db, created = Channel.create_or_update(
+                code = item.get('id'), 
+                name = get_xml_text(item, "display-name"), 
+                visuel = get_xml_text(item, "icon", "src"))
+
+
+
         id_channel = item.get('id')        
         if id_channel in ["ParisPremiere.fr", "CanalPlus.fr", "CanalPlusCinema.fr"] : continue
         display_name = get_xml_text(item, "display-name") 
         image = get_xml_text(item, "icon", "src")
         dic_channels[id_channel] = (display_name, image)
 
+
     return dic_channels
 
-def get_programmes(methode):
+def maj_db(mode):
+    if mode == "s":     root = get_xml_root_static()
+    elif mode == "r":   root = get_xml_root_requests()
+    elif mode == "u":   root = get_xml_root_urllib()
 
-    if methode == "s":     root = get_xml_root_static()
-    elif methode == "r": root = get_xml_root_requests()
-    elif methode == "u":   root = get_xml_root_urllib()
-
-    dic_channels = get_channels(root)
-    items = root.findall('.//programme[category="Film"]')
-    programmes = []
-
+    # *****************************************
+    # CHANNELS 
+    # *****************************************
+    items = root.findall('.//channel')
     for item in items:
-        id = len(programmes) + 1
-        add_programme(programmes, item, dic_channels)
+        channel_db, created = Channel.create_or_update(
+                code = item.get('id'), 
+                name = get_xml_text(item, "display-name"), 
+                visuel = get_xml_text(item, "icon", "src"))
 
-    programmes.sort(key=comparer_par_start)
-    return programmes
+    # *****************************************
+    # PROGRAMMES
+    # *****************************************
+    items = root.findall('.//programme[category="Film"]')
+    for item in items:
+        programme_db, created = Programme.create_or_update(
+            channel  = Channel.objects.get(pk = item.get('channel')), 
+            start    = get_xml_date(item.get('start')), 
+            defaults = {
+                    'stop'          : get_xml_date(item.get('stop')), 
+                    'title'         : get_xml_text(item, "title"), 
+                    'description'   : get_xml_text(item, "desc"),                                
+                    'category'      : item.findall("./category")[1].text, 
+                    'genre'         : (item.findall("./category")[1].text).replace("Film", ""), 
+                    'visuel'        : get_xml_text(item, "icon", "src"),                                    
+                    }
+            ) 
 
-def add_programme(programmes, item, dic_channels):
-    
-    # Filtre sur la date du jour
-    start = get_xml_date(item.get('start'))
-    id_channel = item.get('channel')
+def get_programmes(methode):
+    #if start.strftime("%Y%m%d") != datetime.now().date().strftime("%Y%m%d") or start.hour < 20 : return    
+    #return Programme.objects.filter(day = crit_day, category = crit_category, channel__channel_id__in=channels).order_by('channel__sort')
+    #return Programme.objects.filter(start > datetime.now()).order_by('start')
+    #return Programme.objects.filter(category = "Film").order_by('start')
+    return Programme.objects.order_by('start')
 
-    # EXIT dans ces cas là :
-    if start.strftime("%Y%m%d") != datetime.now().date().strftime("%Y%m%d") or start.hour < 20 : return    
-    if id_channel not in dic_channels: return
-    
-    channel = dic_channels[id_channel][0]
-    channel_image = dic_channels[id_channel][1]
-
-    # Recupère les autres propriétés
-    stop = get_xml_date(item.get('stop'))
-    title = get_xml_text(item, "title") 
-    genre = (item.findall("./category")[1].text).replace("Film", "")
-    description = get_xml_text(item, "desc")
-    image = get_xml_text(item, "icon", "src")
-
-    p = Programme(len(programmes)+1, title, genre, channel, start, stop, description, image, channel_image)
-    programmes.append(p)
-    
 
 def get_xml_text(item, balise_name, arg = None):
         node = item.find(balise_name)

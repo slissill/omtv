@@ -39,7 +39,7 @@
                     <tr>
                         <td>
                             <img 
-                            src="{{ item.channel_image }}"
+                            src="{{ item.channel.visuel }}"
                             alt="{{ item.channel }}" 
                             title="{{ item.channel }}" 
                             style="border: 0px solid black; height: 40px;">
@@ -66,7 +66,7 @@
 
     <div id="programme-{{ item.id }}" class="collapse" style="padding: 10px;">
         <p>{{ item.description }}</p>
-        <img class="img-rounded" src="{{item.image}}" style="width: 100%;">
+        <img class="img-rounded" src="{{item.visuel}}" style="width: 100%;">
     </div>
 
 

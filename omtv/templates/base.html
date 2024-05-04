@@ -62,6 +62,19 @@
 
 </HEAD>
 <BODY style="margin: 10px;">
+
+  <div style="text-align: center;">
+  <a href ="{% url 'omtv:home' %}">HOME</a> | 
+  <a href ="{% url 'omtv:programmes' %}">PROGRAMMES</a> | 
+  <a href ="{% url 'omtv:update_db' %}?mode=s">Update DB - Static</a> | 
+  <a href ="{% url 'omtv:update_db' %}?mode=r">Update DB - Resquests</a> | 
+  <a href ="{% url 'omtv:update_db' %}?mode=u">Update DB - urllib.Requests</a> | 
+  </div>
+
+  <br>
+
+
+
     <div class="container bg-dark text-light">
         {% block content %}{% endblock %}
     </div>
