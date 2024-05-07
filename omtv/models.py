@@ -21,9 +21,11 @@ class Channel(models.Model):
     code = models.CharField(max_length=50, verbose_name="Code", primary_key=True)
     name = models.CharField(max_length=50, verbose_name="Chaine")
     visuel = models.CharField(max_length=500, verbose_name="Visuel")
+    sort = models.IntegerField(default=0, verbose_name="Tri")
     class Meta:
         verbose_name = "Chaine"
-        verbose_name_plural = "Chaines"        
+        verbose_name_plural = "Chaines"
+        ordering = ['sort']
 
     def __str__(self): return self.name
 
@@ -37,7 +39,8 @@ class Channel(models.Model):
 class Programme(models.Model):
     # Comme je ne lui précise pas de PK, le champ id (pk) sera automatiquement généré
     start = models.DateTimeField(verbose_name="Début")    
-    stop = models.DateTimeField(verbose_name="Fin")    
+    stop = models.DateTimeField(verbose_name="Fin")
+    pdate = models.DateField(verbose_name="Date")
     title = models.CharField(max_length=300, verbose_name="Titre")
     description = models.CharField(max_length=1000, verbose_name="Description")
     category = models.CharField(max_length=100, verbose_name="Catégorie")
@@ -50,8 +53,8 @@ class Programme(models.Model):
     class Meta:
         verbose_name = "Programme"
         verbose_name_plural = "Programmes"
-        constraints = [models.UniqueConstraint(fields=['channel', 'start'], name='unique_programme_key')]        
-        ordering = ['channel', 'start']
+        constraints = [models.UniqueConstraint(fields=['start', 'channel'], name='unique_programme_key')]        
+        ordering = ['start', 'channel']
     
     def __str__(self): return self.title
 
@@ -59,7 +62,8 @@ class Programme(models.Model):
     def create_or_update(cls, **kwargs): return cls.objects.get_or_create(**kwargs)
 
     @property
-    def date(self): return self.start.date
+    def xdate(self): return self.start.date()
+
     @property
     def date_str(self): return self.start.strftime("%Y-%m-%d")
     @property

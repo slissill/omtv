@@ -4,16 +4,8 @@
 
 {% block content %}
 
-    {% if view == "accordeon" %}
-
-        {% for item in programmes %} 
-            {% include './programme_item.html' with item=item %}
-        {% endfor %}
-
-    {% else %}
-
-        {% include './programme_table.html' with item=item %}
-
-    {% endif %}
+    {% for item in programmes %} 
+        {% include './programme_item.html' with item=item %}
+    {% endfor %}
     
 {% endblock %}

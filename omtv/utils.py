@@ -1,7 +1,7 @@
 import os
 import requests
 import xml.etree.ElementTree as ET
-from datetime import datetime, date
+from datetime import datetime, timedelta, date, timezone
 from .models import cls_programme, Channel , Programme
 from django.conf import settings
 import urllib.request
@@ -55,36 +55,43 @@ def maj_db(mode):
     # CHANNELS 
     # *****************************************
     items = root.findall('.//channel')
+    idx = 0
     for item in items:
+        idx += 1 
         channel_db, created = Channel.create_or_update(
                 code = item.get('id'), 
                 name = get_xml_text(item, "display-name"), 
-                visuel = get_xml_text(item, "icon", "src"))
+                visuel = get_xml_text(item, "icon", "src"), 
+                sort = idx
+                )
+                
 
     # *****************************************
     # PROGRAMMES
     # *****************************************
     items = root.findall('.//programme[category="Film"]')
     for item in items:
+        start_time = get_xml_date(item.get('start'))
         programme_db, created = Programme.create_or_update(
             channel  = Channel.objects.get(pk = item.get('channel')), 
-            start    = get_xml_date(item.get('start')), 
+            start    = start_time, 
             defaults = {
                     'stop'          : get_xml_date(item.get('stop')), 
+                    'pdate'         : start_time.date(),
                     'title'         : get_xml_text(item, "title"), 
                     'description'   : get_xml_text(item, "desc"),                                
-                    'category'      : item.findall("./category")[1].text, 
+                    'category'      : item.findall("./category")[0].text, 
                     'genre'         : (item.findall("./category")[1].text).replace("Film", ""), 
                     'visuel'        : get_xml_text(item, "icon", "src"),                                    
                     }
             ) 
 
-def get_programmes(methode):
-    #if start.strftime("%Y%m%d") != datetime.now().date().strftime("%Y%m%d") or start.hour < 20 : return    
-    #return Programme.objects.filter(day = crit_day, category = crit_category, channel__channel_id__in=channels).order_by('channel__sort')
-    #return Programme.objects.filter(start > datetime.now()).order_by('start')
-    #return Programme.objects.filter(category = "Film").order_by('start')
-    return Programme.objects.order_by('start')
+# def get_programmes(methode):
+#     #if start.strftime("%Y%m%d") != datetime.now().date().strftime("%Y%m%d") or start.hour < 20 : return    
+#     #return Programme.objects.filter(day = crit_day, category = crit_category, channel__channel_id__in=channels).order_by('channel__sort')
+#     #return Programme.objects.filter(start > datetime.now()).order_by('start')
+#     #return Programme.objects.filter(category = "Film").order_by('start')
+#     return Programme.objects.order_by('start')
 
 
 def get_xml_text(item, balise_name, arg = None):
@@ -94,7 +101,9 @@ def get_xml_text(item, balise_name, arg = None):
         else :
                 return node.text if arg is None else node.get(arg)
 
-def get_xml_date(s):return datetime.strptime(s, '%Y%m%d%H%M%S %z')
+def get_xml_date(s):
+    s=s.replace("+0200", "+0000")
+    return datetime.strptime(s, '%Y%m%d%H%M%S %z')
 
 def comparer_par_start(programme):
     return programme.start

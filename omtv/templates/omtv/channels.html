@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Channels{% endblock %}
+
+{% block script %}
+
+<script>
+    // Fonction pour cocher toutes les cases à cocher
+    function checkAll(valeur) {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = valeur;
+        }        
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+
+<h2>
+    {{title}}
+    <button type="button" class="btn" onclick="checkAll(true)">Check All</button>
+    <button type="button" class="btn" onclick="checkAll(false)">Uncheck All</button>
+
+</h2>
+
+
+<form method="POST" id="mon-formulaire">
+    {% csrf_token %}
+
+    <ul class="list-unstyled card-columns" style="column-count: 2;">
+        {% for channel in channels %}
+        <li>            
+            <!-- <input type="checkbox" value="{{channel.code}}" name="chkbox" id="{{channel.code}}" onclick="soumettreFormulaire()" {% if item.is_pref %} checked {% endif %} > -->
+            <input type="checkbox" value="{{channel.code}}" name="chk_channel" id="{{channel.code}}"  {% if channel.checked %} checked {% endif %}>
+            <label for="{{channel.code}}">{{ channel.name }}</label>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <div style = "text-align: center;">
+        <input type="submit" name="update" value="Valider" class="btn btn-default">
+    </div>
+
+</form>
+
+{% endblock %}

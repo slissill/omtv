@@ -46,7 +46,7 @@
                         </td>
 
                         <td>                            
-                            <span class="programme-title">{{ item.title }}</span>
+                            <span class="programme-title">{{ item.title }}</span> 
                         </td>
                         <td>
                             <p class="programme-property-strong">{{ item.genre }}</p>
@@ -66,7 +66,9 @@
 
     <div id="programme-{{ item.id }}" class="collapse" style="padding: 10px;">
         <p>{{ item.description }}</p>
-        <img class="img-rounded" src="{{item.visuel}}" style="width: 100%;">
+        <!-- <img class="img-rounded" src="{{item.visuel}}" style="width: 100%;">  -->
+        <img class="img-thumbnail" src="{{item.visuel}}" style="width: 100%;"> 
+        
     </div>
 
 

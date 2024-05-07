@@ -6,6 +6,7 @@ app_name = "omtv"
 urlpatterns = [
     path('', views.home, name='home'),
     path('programmes', views.programmes, name='programmes'),
+    path('channels', views.channels, name='channels'),
 
     path('update_db', views.update_db, name='update_db'),
 ]
@@ -17,6 +18,8 @@ urlpatterns = [
 ******* VENV ***********************************************
 ************************************************************
 C:\ZDEPOT\VENV\SCRIPTS\activate.ps1
+
+
 C:\ZDEPOT\VENV\SCRIPTS\deactivate
 
 
