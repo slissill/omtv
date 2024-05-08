@@ -4,6 +4,29 @@
 
 {% block content %}
 
+    <form id="mon_form" method="post">
+        {% csrf_token %}        
+        <input type="hidden" name="crit_date" id="crit_date" value="">
+    </form>    
+
+    <div class="d-flex justify-content-center">
+        <ul class="nav nav-pills" style="padding-bottom: 5px;">
+        {% for date in dates %}
+
+            {% if date.selected %}
+                <li class="active"><a href="#">{{ date.name }}</a></li>
+            {% else %}            
+                <li><a href="#" 
+                    onclick="event.preventDefault();
+                            document.getElementById('crit_date').value = '{{ date.code }}'; 
+                            document.getElementById('mon_form').submit();"
+                            >{{ date.name }}</a></li>
+            {% endif %}        
+        {% endfor %}
+        </ul>
+    </div>
+
+
     {% for item in programmes %} 
         {% include './programme_item.html' with item=item %}
     {% endfor %}

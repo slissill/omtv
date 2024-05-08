@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .utils import maj_db
 from .models import Programme, Channel
-from datetime import date
+from datetime import date, datetime, timedelta
 
 # import django
 # import sys
@@ -31,10 +31,28 @@ def update_db(request):
     maj_db (request.GET.get('mode', 's'))
     return redirect ("omtv:programmes")
 
+def get_dates(selected_date):
+
+    dates = Programme.objects.order_by('pdate').values_list('pdate', flat=True).distinct()
+    jours_semaine = ['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim']
+    today = datetime.now().date()
+    today_plus = today  + timedelta(days=3)
+    formatted_dates = [
+                            {'name': f"{jours_semaine[date.weekday()]} {date.day}", 
+                             'code': date.strftime('%Y%m%d'),  
+                             'selected': date.strftime('%Y%m%d') == selected_date, 
+                            } for date in dates if date >= today and date < today_plus
+                    ]
+    #for date in dates if date >= datetime.now().date() - timedelta(days=1)
+    return formatted_dates
 
 def programmes(request):
     print_request(request)
     
+    if request.method == "POST":
+        seleted_date = request.POST.get('crit_date')
+    else:
+        seleted_date = datetime.now().date().strftime('%Y%m%d')
 
     cookie = request.COOKIES.get("channels")
     channels = []
@@ -44,14 +62,14 @@ def programmes(request):
         channels = json.loads(cookie)
 
     progs = Programme.objects.filter(
-        pdate = date.today(),
+        pdate = datetime.strptime(seleted_date, "%Y%m%d"), # date.today(),
         start__time__gte='20:00', 
         channel__in=channels
         ).order_by('start', 'channel__sort')
     
 
     context = {"programmes" : progs, 
-               "view" : request.GET.get('view', 'accordeon')}
+               "dates" : get_dates(seleted_date)}
     return render(request, 'omtv/programmes.html', context)
 
 def channels(request):    

@@ -30,7 +30,7 @@
 
     <ul class="list-unstyled card-columns" style="column-count: 2;">
         {% for channel in channels %}
-        <li>            
+        <li style="margin-bottom: 7px;">
             <!-- <input type="checkbox" value="{{channel.code}}" name="chkbox" id="{{channel.code}}" onclick="soumettreFormulaire()" {% if item.is_pref %} checked {% endif %} > -->
             <input type="checkbox" value="{{channel.code}}" name="chk_channel" id="{{channel.code}}"  {% if channel.checked %} checked {% endif %}>
             <label for="{{channel.code}}">{{ channel.name }}</label>
