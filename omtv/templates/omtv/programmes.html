@@ -8,15 +8,16 @@
         {% csrf_token %}        
         <input type="hidden" name="crit_date" id="crit_date" value="">
     </form>    
-
+    
     <div class="d-flex justify-content-center">
-        <ul class="nav nav-pills" style="padding-bottom: 5px;">
+        <ul class="pagination pagination-sm">
+
         {% for date in dates %}
 
             {% if date.selected %}
-                <li class="active"><a href="#">{{ date.name }}</a></li>
+                <li class="page-item active"><a class="page-link" href="#">{{ date.name }}</a></li>
             {% else %}            
-                <li><a href="#" 
+                <li class="page-item"><a class="page-link" href="#" 
                     onclick="event.preventDefault();
                             document.getElementById('crit_date').value = '{{ date.code }}'; 
                             document.getElementById('mon_form').submit();"
