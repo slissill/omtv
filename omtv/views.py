@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .utils import maj_db
 from .models import Programme, Channel
 from datetime import date, datetime, timedelta
+from django.db.models import Count
 
 # import django
 # import sys
@@ -30,6 +31,29 @@ def home(request):
 def update_db(request):  
     maj_db (request.GET.get('mode', 's'))
     return redirect ("omtv:programmes")
+
+
+def programmes_update(request):
+    return render(request, 'omtv/programmes_update.html')
+
+def statistics(request):
+
+    dates_with_program_counts = Programme.objects.values('pdate').annotate(cnt=Count('pdate'))
+    
+    #channels_with_program_counts = Channel.objects.annotate(program_count=Count('fk_Programme_Channel'))
+    channels_with_program_counts = Channel.objects.annotate(cnt=Count('fk_Programme_Channel')).order_by('-cnt')
+
+    genres_with_program_counts = Programme.objects.values('genre').annotate(cnt=Count('genre')).order_by('-cnt')
+
+
+
+    context = {
+        'dates_with_program_counts' : dates_with_program_counts,
+        'channels_with_program_counts' : channels_with_program_counts, 
+        'genres_with_program_counts' : genres_with_program_counts, 
+        }
+    return render(request, 'omtv/statistics.html', context)
+
 
 def get_dates(selected_date):
 

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}OMTV{% endblock %}
+{% block title %}FIlms{% endblock %}
 
 {% block content %}
 
@@ -15,17 +15,43 @@
         {% for date in dates %}
 
             {% if date.selected %}
-                <li class="page-item active"><a class="page-link" href="#">{{ date.name }}</a></li>
+                <li class="page-item active" style="margin: 10px;" >
+                    <a class="page-link" href="#">{{ date.name }}</a>
+                </li>
             {% else %}            
-                <li class="page-item"><a class="page-link" href="#" 
-                    onclick="event.preventDefault();
+                <li class="page-item">
+                    <a class="page-link" href="#" style="margin: 10px;" 
+                            onclick="event.preventDefault();
                             document.getElementById('crit_date').value = '{{ date.code }}'; 
                             document.getElementById('mon_form').submit();"
-                            >{{ date.name }}</a></li>
+                            >{{ date.name }}
+                    </a>
+                </li>
             {% endif %}        
         {% endfor %}
         </ul>
     </div>
+
+    <!-- <div class="d-flex justify-content-center" style="margin-bottom: 5px;">
+        <ul class="nav nav-pills" role="tablist">
+        {% for date in dates %}
+
+            {% if date.selected %}
+                <li class="nav-item" data-toggle="pill"><a class="nav-link active" href="#">{{ date.name }}</a></li>
+            {% else %}            
+                <li class="nav-item" data-toggle="pill">
+                    <a class="nav-link" href="#" 
+                            onclick="event.preventDefault();
+                            document.getElementById('crit_date').value = '{{ date.code }}'; 
+                            document.getElementById('mon_form').submit();"
+                            >{{ date.name }}
+                    </a>
+                </li>
+            {% endif %}        
+        {% endfor %}
+        </ul>
+    </div> -->
+
 
 
     {% for item in programmes %} 

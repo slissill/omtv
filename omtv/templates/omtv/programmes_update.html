@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Programmes Update{% endblock %}
+
+{% block content %}
+
+
+<a href ="{% url 'omtv:update_db' %}?mode=s">Update DB - Static</a> 
+<br> 
+<br> 
+<a href ="{% url 'omtv:update_db' %}?mode=r">Update DB - Resquests</a>
+<br> 
+<br> 
+<a href ="{% url 'omtv:update_db' %}?mode=u">Update DB - urllib.Requests</a>
+<br> 
+<br> 
+<a href ="{% url 'omtv:statistics' %}">Statistsics</a>
+<br> 
+<br> 
+    
+{% endblock %}  

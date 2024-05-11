@@ -9,6 +9,8 @@ urlpatterns = [
     path('channels', views.channels, name='channels'),
 
     path('update_db', views.update_db, name='update_db'),
+    path('programmes_update', views.programmes_update, name='programmes_update'),
+    path('statistics', views.statistics, name='statistics'),
 ]
 
 
