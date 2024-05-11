@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Graphics XXX{% endblock %}
+
+{% block script %}
+
+<style>
+    table {
+        width: 100%; /* La table prend 100% de la largeur disponible */
+        border-collapse: collapse; /* Fusionner les bordures de cellules */
+    }
+
+    th, td {
+        border: 1px solid rgb(192, 188, 188); /* Bordures pour les cellules */
+        padding: 2px; /* Espacement interne */
+        text-align: center; /* Centrer le contenu */
+        vertical-align: middle;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+    <h4>Graphique Plotly</h4>
+    <!-- <img src="{{ graph_file }}" alt="Graphique Matplotlib"> -->
+    <img src="{% static 'graphics/graph.png' %}" alt="Graphique Matplotlib">
+
+    <h4>Programmes par date</h4>
+    <table>
+        {% for info in dates_with_program_counts %}
+            <tr><td>{{ info.pdate|date:"D d/m/Y" }}</td><td>{{ info.cnt }}</td></tr>
+        {% endfor %}
+    </table>
+
+
+
+{% endblock %}  

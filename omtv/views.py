@@ -1,9 +1,13 @@
+import matplotlib.pyplot as plt
+import os
+from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .utils import maj_db
 from .models import Programme, Channel
 from datetime import date, datetime, timedelta
 from django.db.models import Count
+
 
 # import django
 # import sys
@@ -53,6 +57,33 @@ def statistics(request):
         'genres_with_program_counts' : genres_with_program_counts, 
         }
     return render(request, 'omtv/statistics.html', context)
+
+
+def graphics(request):
+# Votre logique pour obtenir les données pour le graphique
+    x = [1, 2, 3, 4, 5]
+    y = [10, 20, 15, 25, 30]
+
+    # Créer un graphique à l'aide de Matplotlib
+    plt.plot(x, y)
+    plt.xlabel('X Label')
+    plt.ylabel('Y Label')
+    plt.title('Titre du graphique')
+
+    # Sauvegarder le graphique dans un fichier
+    absolute_path = os.path.join(settings.BASE_DIR, "omtv", "static", "graphics", "graph.png")
+    graph_file = absolute_path
+    plt.savefig(graph_file)
+
+    # Passer le chemin du fichier au modèle pour l'affichage dans la page HTML
+
+
+    dates_with_program_counts = Programme.objects.values('pdate').annotate(cnt=Count('pdate'))
+    context = {
+        'dates_with_program_counts' : dates_with_program_counts,
+        'graph_file': graph_file
+        }
+    return render(request, 'omtv/graphics.html', context)    
 
 
 def get_dates(selected_date):
