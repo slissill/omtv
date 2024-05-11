@@ -25,8 +25,11 @@ SECRET_KEY = 'django-insecure-f^am&fk1^fd(hi9yy7rs(x=+*)s%+l-8b3x)jf1mvn4ftd(=1p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
 
+###################### SWITCH for pythonanywhere   ######################
+ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = ['slissill.pythonanywhere.com']
+#########################################################################
 
 # Application definition
 
@@ -84,18 +87,31 @@ DATABASES = {
 '''
 
 #pip install mysqlclient
+###################### SWITCH for pythonanywhere   ######################
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'omtv',
         'USER': 'root',
         'PASSWORD': 'admin',
-        'HOST': 'localhost',    # Remplacez par l'adresse de votre serveur MySQL s'il est distant
+        'HOST': 'localhost',
         'PORT': '',             # Laissez vide pour utiliser le port par défaut (3306)
         }
     }
 
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'slissill$omtv',
+        'USER': 'slissill',
+        'PASSWORD': 'litswd?pa',
+        'HOST': 'slissill.mysql.pythonanywhere-services.com',
 
+        }
+    }
+'''
+#############################################################################
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
