@@ -32,30 +32,16 @@
         </ul>
     </div>
 
-    <!-- <div class="d-flex justify-content-center" style="margin-bottom: 5px;">
-        <ul class="nav nav-pills" role="tablist">
-        {% for date in dates %}
 
-            {% if date.selected %}
-                <li class="nav-item" data-toggle="pill"><a class="nav-link active" href="#">{{ date.name }}</a></li>
-            {% else %}            
-                <li class="nav-item" data-toggle="pill">
-                    <a class="nav-link" href="#" 
-                            onclick="event.preventDefault();
-                            document.getElementById('crit_date').value = '{{ date.code }}'; 
-                            document.getElementById('mon_form').submit();"
-                            >{{ date.name }}
-                    </a>
-                </li>
-            {% endif %}        
+    {% for tranche, programmes in grouped_programmes.items %}
+        
+        <center><label class="tranche">{{ tranche }}</label></center>
+
+        {% for programme in programmes %}
+            {% include './programme_item.html' with item=programme %}        
         {% endfor %}
-        </ul>
-    </div> -->
-
-
-
-    {% for item in programmes %} 
-        {% include './programme_item.html' with item=item %}
     {% endfor %}
+
+
     
 {% endblock %}

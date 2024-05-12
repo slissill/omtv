@@ -77,7 +77,14 @@ class Programme(models.Model):
         minutes, _ = divmod(seconds, 60)
         duree_formatee = f"{heures:02}h{minutes:02}"
         return duree_formatee[1:]    
-    
+    @property
+    def tranche(self):
+        if self.hdeb >= "00:00" and self.hdeb <= "05:59" :      return "Nuit"
+        elif self.hdeb >= "06:00" and self.hdeb <= "11:59" :    return "Matin"
+        elif self.hdeb >= "12:00" and self.hdeb <= "19:59" :    return "Après-midi"
+        elif self.hdeb >= "20:00" and self.hdeb <= "21:29" :    return "Soirée 1"
+        else :                                                  return "Soirée 2"
+
     
 
 

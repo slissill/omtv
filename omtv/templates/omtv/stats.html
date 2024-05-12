@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Statistiques{% endblock %}
+
+{% block script %}
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+{% endblock %}
+
+{% block content %}
+
+    <br>
+    Programmes count : {{programmes_count}}
+    <br>
+    Dates count : {{dates_count}}
+    <br>
+    <br>
+
+    {{ div_count_by_date|safe }}
+    <br>
+
+    {{ div_count_by_channel|safe }}
+    <br>
+    {{ div_count_by_genre|safe }}
+{% endblock %}  

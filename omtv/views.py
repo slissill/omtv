@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import os
 from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
@@ -6,8 +5,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .utils import maj_db
 from .models import Programme, Channel
 from datetime import date, datetime, timedelta
-from django.db.models import Count
+from django.db.models import Count, F
+from itertools import groupby
 
+import plotly.graph_objs as go
+from plotly.offline import plot
 
 # import django
 # import sys
@@ -40,51 +42,38 @@ def update_db(request):
 def programmes_update(request):
     return render(request, 'omtv/programmes_update.html')
 
-def statistics(request):
 
-    dates_with_program_counts = Programme.objects.values('pdate').annotate(cnt=Count('pdate'))
+
+def get_graphic_2d(datas, title):
+    # Using plotly library
+    labels = []
+    values = []
+    for item in datas:
+        labels.append(item['lbl'])
+        values.append(item['cnt'])
+
+    trace = go.Bar(x=labels, y=values)
+    layout = go.Layout(title=title)
+    fig = go.Figure(data=[trace], layout=layout)
+    return plot(fig, output_type='div', include_plotlyjs=False)
+
+def stats(request):
     
-    #channels_with_program_counts = Channel.objects.annotate(program_count=Count('fk_Programme_Channel'))
-    channels_with_program_counts = Channel.objects.annotate(cnt=Count('fk_Programme_Channel')).order_by('-cnt')
+    programmes_count = Programme.objects.count()
+    dates_count = Programme.objects.values('pdate').distinct().count
 
-    genres_with_program_counts = Programme.objects.values('genre').annotate(cnt=Count('genre')).order_by('-cnt')
-
-
+    div_count_by_date = get_graphic_2d(Programme.objects.values(lbl=F('pdate')).annotate(cnt=Count('pdate')).order_by('pdate'), 'Nombre de films par date')
+    div_count_by_channel = get_graphic_2d(Channel.objects.values(lbl=F('name')).annotate(cnt=Count('fk_Programme_Channel')).order_by('-cnt'), 'Nombre de films par channel')
+    div_count_by_genre = get_graphic_2d(Programme.objects.values(lbl=F('genre')).annotate(cnt=Count('genre')).order_by('-cnt'), 'Nombre de films par genre')
 
     context = {
-        'dates_with_program_counts' : dates_with_program_counts,
-        'channels_with_program_counts' : channels_with_program_counts, 
-        'genres_with_program_counts' : genres_with_program_counts, 
+        'programmes_count' : programmes_count,
+        'dates_count' : dates_count,
+        'div_count_by_date': div_count_by_date, 
+        'div_count_by_channel' : div_count_by_channel, 
+        'div_count_by_genre' : div_count_by_genre,
         }
-    return render(request, 'omtv/statistics.html', context)
-
-
-def graphics(request):
-# Votre logique pour obtenir les données pour le graphique
-    x = [1, 2, 3, 4, 5]
-    y = [10, 20, 15, 25, 30]
-
-    # Créer un graphique à l'aide de Matplotlib
-    plt.plot(x, y)
-    plt.xlabel('X Label')
-    plt.ylabel('Y Label')
-    plt.title('Titre du graphique')
-
-    # Sauvegarder le graphique dans un fichier
-    absolute_path = os.path.join(settings.BASE_DIR, "omtv", "static", "graphics", "graph.png")
-    graph_file = absolute_path
-    plt.savefig(graph_file)
-
-    # Passer le chemin du fichier au modèle pour l'affichage dans la page HTML
-
-
-    dates_with_program_counts = Programme.objects.values('pdate').annotate(cnt=Count('pdate'))
-    context = {
-        'dates_with_program_counts' : dates_with_program_counts,
-        'graph_file': graph_file
-        }
-    return render(request, 'omtv/graphics.html', context)    
-
+    return render(request, 'omtv/stats.html', context)    
 
 def get_dates(selected_date):
 
@@ -116,16 +105,23 @@ def programmes(request):
     else:    
         channels = json.loads(cookie)
 
+
     progs = Programme.objects.filter(
-        pdate = datetime.strptime(seleted_date, "%Y%m%d"), # date.today(),
+        pdate = datetime.strptime(seleted_date, "%Y%m%d"), 
         start__time__gte='20:00', 
         channel__in=channels
         ).order_by('start', 'channel__sort')
     
+    # Regoupemement par tranche-horaire
+    grouped_programmes = {}
+    for tranche, programmes_in_tranche in groupby(progs, key=lambda x: x.tranche):
+        grouped_programmes[tranche] = list(programmes_in_tranche)
 
-    context = {"programmes" : progs, 
+
+    context = {"grouped_programmes": grouped_programmes,
                "dates" : get_dates(seleted_date)}
     return render(request, 'omtv/programmes.html', context)
+
 
 def channels(request):    
     print_request(request)
