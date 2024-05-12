@@ -5,8 +5,8 @@ app_name = "omtv"
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('programmes', views.programmes, name='programmes'),
-    path('channels', views.channels, name='channels'),
+    path('programmes', views.programmes, name='programmes'),    
+    path('preferences', views.preferences, name='preferences'),
 
     path('update_db', views.update_db, name='update_db'),
     path('programmes_update', views.programmes_update, name='programmes_update'),

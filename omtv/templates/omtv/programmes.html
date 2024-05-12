@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'base_nav.html' %}
 {% load static %}
-{% block title %}FIlms{% endblock %}
+{% block title %}Films{% endblock %}
 
-{% block content %}
+{% block page_content %}
 
     <form id="mon_form" method="post">
         {% csrf_token %}        
@@ -38,7 +38,7 @@
         <center><label class="tranche">{{ tranche }}</label></center>
 
         {% for programme in programmes %}
-            {% include './programme_item.html' with item=programme %}        
+            {% include './programme_item.html' with item=programme visuel=visuel %}        
         {% endfor %}
     {% endfor %}
 

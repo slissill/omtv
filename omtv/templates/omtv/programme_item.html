@@ -55,6 +55,14 @@
                         </td>
 
                     </tr>
+                    {% if visuel %} 
+                    <tr>
+                        <td colspan="3">
+                            <img class="img-rounded" src="{{item.visuel}}" style="width: 100%;">                     
+                        </td>
+                    </tr>
+                    {% endif %}
+        
                 </table>
                 
                 
@@ -68,7 +76,10 @@
     <div id="programme-{{ item.id }}" class="collapse" style="padding: 10px;">
         <p>{{ item.description }}</p>
         <!-- <img class="img-rounded" src="{{item.visuel}}" style="width: 100%;">  -->
-        <img class="img-thumbnail" src="{{item.visuel}}" style="width: 100%;"> 
+
+        {% if not visuel %} 
+            <img class="img-thumbnail" src="{{item.visuel}}" style="width: 100%;"> 
+        {% endif %}
         
     </div>
 

@@ -117,31 +117,52 @@ def programmes(request):
     for tranche, programmes_in_tranche in groupby(progs, key=lambda x: x.tranche):
         grouped_programmes[tranche] = list(programmes_in_tranche)
 
+    visuel = request.COOKIES.get("visuel") == "true"
 
     context = {"grouped_programmes": grouped_programmes,
-               "dates" : get_dates(seleted_date)}
+               "dates" : get_dates(seleted_date), 
+               "visuel" : visuel}
     return render(request, 'omtv/programmes.html', context)
 
 
-def channels(request):    
+def preferences(request):    
     print_request(request)
     if request.method == "POST":
+        
+        if 'chk_visuel' in request.POST:
+             visuel = True
+        else:
+             visuel = False
+
+
+        #visuel = request.POST("chk_visuel", False)
         channels = request.POST.getlist("chk_channel")
-        response =  redirect ("omtv:programmes")
-        response.set_cookie("channels", json.dumps(channels), max_age=7*24*60*60, samesite=None) #7 jours
+        response = redirect ("omtv:programmes")
+
+        duration = 7*24*60*60 #7 jours
+        response.set_cookie("visuel", json.dumps(visuel), max_age=duration, samesite=None)
+        response.set_cookie("channels", json.dumps(channels), max_age=duration, samesite=None)
+
+
         return response
         
     elif request.method == "GET":
+
+        visuel = request.COOKIES.get("visuel") == "true"
+
         all_channels = Channel.objects.all()        
-        channel_codes = [channel.code for channel in all_channels]        
-        cookie = request.COOKIES.get("channels")
-        if cookie != None: channel_codes = json.loads(cookie)
+        channel_codes = [channel.code for channel in all_channels]
+        cookie_channels = request.COOKIES.get("channels")
+        if cookie_channels != None: channel_codes = json.loads(cookie_channels)
         channels = [
                     {   'code'      : channel.code, 
                         'name'      : channel.name,  
                         'checked'   : channel.code in channel_codes,
                     } for channel in all_channels
                    ]
-        context = {"channels" : channels}
-        return render(request, 'omtv/channels.html', context)
+        context = { 
+            "visuel" : visuel, 
+            "channels" : channels
+            }
+        return render(request, 'omtv/preferences.html', context)
 
