@@ -56,7 +56,7 @@ class Programme(models.Model):
         constraints = [models.UniqueConstraint(fields=['start', 'channel'], name='unique_programme_key')]        
         ordering = ['start', 'channel']
     
-    def __str__(self): return self.title
+    def __str__(self): return f"{self.pdate} - {self.title}"
 
     @classmethod
     def create_or_update(cls, **kwargs): return cls.objects.get_or_create(**kwargs)
