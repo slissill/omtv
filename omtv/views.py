@@ -11,6 +11,8 @@ from itertools import groupby
 import plotly.graph_objs as go
 from plotly.offline import plot
 
+from django.contrib.auth.decorators import login_required
+
 # import django
 # import sys
 # from django.db.models import Q
@@ -38,7 +40,7 @@ def update_db(request):
     maj_db (request.GET.get('mode', 's'))
     return redirect ("omtv:programmes")
 
-
+@login_required
 def programmes_update(request):
     return render(request, 'omtv/programmes_update.html')
 
