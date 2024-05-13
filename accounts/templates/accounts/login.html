@@ -1,0 +1,22 @@
+<! DOCTYPE HTML>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>Login</title>
+    </head>
+    <body>
+        <h1>Connexion</h1>
+
+        {% for message in messages %}
+            <p style="color:red">{{ message }}</p>
+        {% endfor %}
+        
+        <form method = "post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type = "submit" value = "Se connecter">        
+        </form>
+        
+
+    </body>
+</html>
