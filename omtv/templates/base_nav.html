@@ -20,7 +20,7 @@
         {% if user.is_authenticated %}
           <li class="nav-item">Connecté sous {{ user.username }}</li>
           <li class="nav-item"><a class="nav-link" href="{% url 'accounts:logout' %}">Déconnexion</a></li>
-        {% else %}
+        {% else %}          
           <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">Connexion</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'accounts:register' %}">Inscription</a></li>
         {% endif %}
