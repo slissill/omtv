@@ -10,10 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+#xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# Obtient un bool qui indique si je suis dans l'environnement pythonanywhere
+# Il faut préalablement ajouter dans .wsgi une variable d'environnement qui porte cette clée
+IS_PA = 'PYTHONANYWHERE_DOMAIN' in os.environ
+#xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 
 # Quick-start development settings - unsuitable for production
@@ -23,13 +30,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-f^am&fk1^fd(hi9yy7rs(x=+*)s%+l-8b3x)jf1mvn4ftd(=1p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-###################### SWITCH for pythonanywhere   ######################
-DEBUG = True
-#DEBUG = False
-#########################################################################
+
+if IS_PA:
+    DEBUG = False
+    ALLOWED_HOSTS = ['slissill.pythonanywhere.com']
+else:
+    DEBUG = True
+    ALLOWED_HOSTS = []
 
 ###################### SWITCH for pythonanywhere   ######################
-ALLOWED_HOSTS = []
+#DEBUG = True
+#DEBUG = False
+#########################################################################
+###################### SWITCH for pythonanywhere   ######################
+#ALLOWED_HOSTS = []
 #ALLOWED_HOSTS = ['slissill.pythonanywhere.com']
 #########################################################################
 
@@ -81,45 +95,32 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'root.wsgi.application'
 
-
+########################################################################################
 # Database
-
-'''
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-'''
-
-#pip install mysqlclient
-###################### SWITCH for pythonanywhere   ######################
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'omtv',
-        'USER': 'root',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost',
-        'PORT': '',             # Laissez vide pour utiliser le port par défaut (3306)
+# pip install mysqlclient
+########################################################################################
+if IS_PA:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'slissill$omtv',
+            'USER': 'slissill',
+            'PASSWORD': 'litswd?pa',
+            'HOST': 'slissill.mysql.pythonanywhere-services.com',
+            }
         }
-    }
-
-'''
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'slissill$omtv',
-        'USER': 'slissill',
-        'PASSWORD': 'litswd?pa',
-        'HOST': 'slissill.mysql.pythonanywhere-services.com',
-
+else:    
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'omtv',
+            'USER': 'root',
+            'PASSWORD': 'admin',
+            'HOST': 'localhost',
+            'PORT': '',             # Laissez vide pour utiliser le port par défaut (3306)
+            }
         }
-    }
-'''
-#############################################################################
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
