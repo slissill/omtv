@@ -1,24 +1,13 @@
-import os
-from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .utils import maj_db
-from .tasks import main
+from .management.commands.import_xml_data import main as import_xml_data_main
 from .models import Programme, Channel
 from datetime import date, datetime, timedelta
 from django.db.models import Count, F, Max
 from itertools import groupby
-
 import plotly.graph_objs as go
 from plotly.offline import plot
-
 from django.contrib.auth.decorators import login_required
-
-# import django
-# import sys
-# from django.db.models import Q
-# from django.db.models import Count
-# from django.http import JsonResponse
 import json
 
 #return HttpResponse("update_db_r") 
@@ -37,14 +26,9 @@ def print_request(request):
 def home(request):    
     return render(request, 'omtv/home.html')
 
-def update_db(request):  
-    maj_db (request.GET.get('mode', 's'))
+def import_xml_data(request):  
+    import_xml_data_main()
     return redirect ("omtv:programmes")
-
-def task_main(request):  
-    main()
-    return redirect ("omtv:programmes")
-
 
 @login_required
 def dashboard(request):

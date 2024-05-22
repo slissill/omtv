@@ -9,12 +9,8 @@ urlpatterns = [
     path('home', views.home, name='home'),
     path('programmes', views.programmes, name='programmes'),    
     path('preferences', views.preferences, name='preferences'),
-
-    path('update_db', views.update_db, name='update_db'),
-    path('task_main', views.task_main, name='task_main'),
-
+    path('import_xml_data', views.import_xml_data, name='import_xml_data'),
     path('dashboard', views.dashboard, name='dashboard'),
-
     path('stats', views.stats, name='stats'),
     
 ]

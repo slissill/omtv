@@ -4,6 +4,13 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from omtv.models import Channel, Programme
 
+'''
+Dans pythonanywhere pour configurer la task il faut saisir : 
+source /home/slissill/.virtualenvs/venv/bin/activate && python /home/slissill/omtv/manage.py import_xml_data
+
+'''
+
+
 class Command(BaseCommand):
     help = 'Import XML data from XMLTV'
 
