@@ -1,6 +1,6 @@
 {% extends 'base_nav.html' %}
 {% load static %}
-{% block title %}Programmes Update{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 {% block page_content %}
 
@@ -20,7 +20,10 @@
 <a href ="{% url 'omtv:stats' %}">Satistiques</a>
 <br> 
 <br> 
-<a href="{% url 'admin:index' %}">Accéder à l'interface d'administration</a>
+<a href="{% url 'admin:index' %}">Page ADMIN</a>
+<br> 
+<br> 
+<a href="{% url 'accounts:logout' %}">Déconnexion</a>
 
     
 {% endblock %}  

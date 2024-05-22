@@ -11,7 +11,7 @@ urlpatterns = [
     path('preferences', views.preferences, name='preferences'),
 
     path('update_db', views.update_db, name='update_db'),
-    path('programmes_update', views.programmes_update, name='programmes_update'),
+    path('dashboard', views.dashboard, name='dashboard'),
 
     path('stats', views.stats, name='stats'),
     

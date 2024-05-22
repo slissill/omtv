@@ -41,8 +41,8 @@ def update_db(request):
     return redirect ("omtv:programmes")
 
 @login_required
-def programmes_update(request):
-    return render(request, 'omtv/programmes_update.html')
+def dashboard(request):
+    return render(request, 'omtv/dashboard.html')
 
 
 

@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
-    'crispy_bootstrap4',
+    'crispy_bootstrap5',
     'omtv', 
     'accounts'
 
@@ -59,7 +59,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 ROOT_URLCONF = 'root.urls'
 
