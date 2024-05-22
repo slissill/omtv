@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .management.commands.import_xml_data import main as import_xml_data_main
-from .models import Programme, Channel
+from .models import Programme, Channel, Import
 from datetime import date, datetime, timedelta
 from django.db.models import Count, F, Max
 from itertools import groupby
@@ -31,8 +31,9 @@ def import_xml_data(request):
     return redirect ("omtv:programmes")
 
 @login_required
-def dashboard(request):
-    return render(request, 'omtv/dashboard.html')
+def dashboard(request): 
+    last_imports = Import.objects.all()[:10]
+    return render(request, 'omtv/dashboard.html', {'last_imports' : last_imports})
 
 
 

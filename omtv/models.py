@@ -87,34 +87,25 @@ class Programme(models.Model):
 
     
 
-
-
 #******************************************************
-# Class cls_programme
+# Class Import
 #******************************************************
-class cls_programme:
-    def __init__(self, id, title, genre, channel, start, stop, description, image, channel_image):
-        self.id = id
-        self.title = title
-        self.genre = genre
-        self.channel = channel
-        self.start = start
-        self.stop = stop
-        self.description = description 
-        self.image = image
-        self.channel_image = channel_image
+class Import(models.Model):
+    # Comme je ne lui précise pas de PK, le champ id (pk) sera automatiquement généré
+    start = models.DateTimeField(verbose_name="Début", primary_key=True)
+    end = models.DateTimeField(verbose_name="Fin", blank=True, null=True)
+    count_before = models.IntegerField (verbose_name="Count avant")
+    count_after = models.IntegerField (verbose_name="Count après", blank=True, null=True)
 
-    def __str__(self): return self.channel_image 
-
-    @property
-    def hdeb(self): return self.start.strftime("%H:%M")
-    @property
-    def hfin(self): return self.stop.strftime("%H:%M")        
-
-    @property
-    def duree(self):
-        difference = self.stop - self.start
-        heures, seconds = divmod(difference.seconds, 3600)
-        minutes, _ = divmod(seconds, 60)
-        duree_formatee = f"{heures:02}h{minutes:02}"
-        return duree_formatee[1:]
+    class Meta:
+        verbose_name = "Import"
+        verbose_name_plural = "Imports"        
+        ordering = ['-start']
+    
+    def __str__(self):
+        start_str = self.start.strftime("%Y-%m-%d %H:%M:%S")
+        if self.end:
+            duration = (self.end - self.start).total_seconds()
+            return f"{start_str} : {round(duration, 1)} secondes, {self.count_after - self.count_before} programmes"
+        else:
+            return f"{start_str} - No end time"

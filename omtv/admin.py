@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Channel, Programme
+from .models import Channel, Programme, Import
 
 class ChannelAdmin(admin.ModelAdmin):
     list_display = ('name', 'sort')
@@ -20,9 +20,15 @@ class ProgrammeAdmin(admin.ModelAdmin):
         ('Audit', {'fields' : ['created_at', 'updated_at']}), 
     ]
 
+class ImportAdmin(admin.ModelAdmin):
+    # list_display = ('start', 'end', 'count_before', 'count_after')
+    list_filter = ('start', 'end')
+    search_fields = ('start',)
+    date_hierarchy = 'start'
+    # Autres configurations personnalisées si nécessaire
 
 # Register your models here.
 admin.site.register(Channel, ChannelAdmin)
 admin.site.register(Programme, ProgrammeAdmin)
-
+admin.site.register(Import, ImportAdmin)
 

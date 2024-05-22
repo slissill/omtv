@@ -1,8 +1,9 @@
 from django.core.management.base import BaseCommand
+from django.utils import timezone
 import requests
 import xml.etree.ElementTree as ET
 from datetime import datetime
-from omtv.models import Channel, Programme
+from omtv.models import Channel, Programme, Import
 
 '''
 Dans pythonanywhere pour configurer la task il faut saisir : 
@@ -18,6 +19,13 @@ class Command(BaseCommand):
         main()
 
 def main():
+    
+    #----  Log Import  -----------------------------------------------------------------
+    # Log Import
+    new_import = Import(start=timezone.now(), count_before=Programme.objects.count())
+    new_import.save()
+    #-----------------------------------------------------------------------------------
+
     url = "https://xmltvfr.fr/xmltv/xmltv_tnt.xml"
     response = requests.get(url)
     xml_content = response.content
@@ -56,6 +64,13 @@ def main():
                 'visuel'        : get_xml_text(item, "icon", "src"),                                    
             }
         )
+
+    #----  Log Import  -----------------------------------------------------------------
+    # Log Import
+    new_import.end = timezone.now()
+    new_import.count_after =  Programme.objects.count()
+    new_import.save()    
+    #-----------------------------------------------------------------------------------
 
 def get_xml_text(item, balise_name, arg=None):
     node = item.find(balise_name)

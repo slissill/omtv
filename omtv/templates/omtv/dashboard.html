@@ -17,5 +17,14 @@
 <a href="{% url 'accounts:logout' %}">Déconnexion</a>
 <br> 
 <br> 
-    
+    {% if last_imports %}
+        <h2>10 derniers imports réalisés :</h2>
+        <ul>
+        {% for import_instance in last_imports %}
+            <li>{{ import_instance }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun import réalisé.</p>
+    {% endif %}    
 {% endblock %}  
