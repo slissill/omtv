@@ -1,3 +1,9 @@
+import sys
+import os
+
+# Ajouter le répertoire parent au chemin Python
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import requests
 import xml.etree.ElementTree as ET
 from datetime import datetime
