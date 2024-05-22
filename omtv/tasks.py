@@ -1,15 +1,12 @@
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
 import requests
 import xml.etree.ElementTree as ET
 from datetime import datetime
-from .models import Channel, Programme
+from omtv.models import Channel, Programme
 
 # https://www.pythonanywhere.com/forums/topic/31949/
 # https://stackoverflow.com/questions/16981921/relative-imports-in-python-3/28154841#28154841
 # https://www.pythonanywhere.com/forums/topic/13787/
+
 
 
 def main():
@@ -53,6 +50,8 @@ def main():
                     }
             ) 
 
+if __name__ == "__main__":
+    main()
 
 def get_xml_text(item, balise_name, arg = None):
         node = item.find(balise_name)
