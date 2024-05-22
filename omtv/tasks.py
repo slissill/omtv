@@ -1,7 +1,15 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 import requests
 import xml.etree.ElementTree as ET
 from datetime import datetime
-from omtv.models import Channel , Programme
+from .models import Channel, Programme
+
+# https://www.pythonanywhere.com/forums/topic/31949/
+# https://stackoverflow.com/questions/16981921/relative-imports-in-python-3/28154841#28154841
+# https://www.pythonanywhere.com/forums/topic/13787/
 
 
 def main():
