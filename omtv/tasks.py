@@ -1,7 +1,7 @@
 import requests
 import xml.etree.ElementTree as ET
 from datetime import datetime
-from .models import Channel , Programme
+from omtv.models import Channel , Programme
 
 
 def main():
