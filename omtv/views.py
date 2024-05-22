@@ -3,9 +3,10 @@ from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .utils import maj_db
+from .tasks import main
 from .models import Programme, Channel
 from datetime import date, datetime, timedelta
-from django.db.models import Count, F
+from django.db.models import Count, F, Max
 from itertools import groupby
 
 import plotly.graph_objs as go
@@ -40,6 +41,11 @@ def update_db(request):
     maj_db (request.GET.get('mode', 's'))
     return redirect ("omtv:programmes")
 
+def task_main(request):  
+    main()
+    return redirect ("omtv:programmes")
+
+
 @login_required
 def dashboard(request):
     return render(request, 'omtv/dashboard.html')
@@ -60,7 +66,10 @@ def get_graphic_2d(datas, title):
     return plot(fig, output_type='div', include_plotlyjs=False)
 
 def stats(request):
-    
+
+    max_updated_at = Programme.objects.aggregate(max_updated_at=Max('updated_at'))['max_updated_at']
+
+
     programmes_count = Programme.objects.count()
     dates_count = Programme.objects.values('pdate').distinct().count
 
@@ -71,6 +80,7 @@ def stats(request):
     context = {
         'programmes_count' : programmes_count,
         'dates_count' : dates_count,
+        'max_updated_at' : max_updated_at, 
         'div_count_by_date': div_count_by_date, 
         'div_count_by_channel' : div_count_by_channel, 
         'div_count_by_genre' : div_count_by_genre,

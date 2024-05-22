@@ -11,6 +11,8 @@ urlpatterns = [
     path('preferences', views.preferences, name='preferences'),
 
     path('update_db', views.update_db, name='update_db'),
+    path('task_main', views.task_main, name='task_main'),
+
     path('dashboard', views.dashboard, name='dashboard'),
 
     path('stats', views.stats, name='stats'),
