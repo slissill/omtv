@@ -1,0 +1,36 @@
+
+
+<form id="mon_form" method="post">
+    {% csrf_token %}        
+    <input type="hidden" name="crit_date" id="crit_date" value="">
+</form>    
+
+
+<div class="d-flex justify-content-between align-items-center">
+
+    <ul class="pagination pagination-sm mb-0">    
+
+    {% for date in dates %}
+
+        {% if date.selected %}
+            <li class="page-item active" style="margin: 10px;" >
+                <a class="page-link" href="#">{{ date.name }}</a>
+            </li>
+        {% else %}            
+            <li class="page-item">
+                <a class="page-link" href="#" style="margin: 10px;" 
+                        onclick="event.preventDefault();
+                        document.getElementById('crit_date').value = '{{ date.code }}'; 
+                        document.getElementById('mon_form').submit();"
+                        >{{ date.name }}
+                </a>
+            </li>
+        {% endif %}        
+    {% endfor %}
+    </ul>
+
+    <button type="button" class="btn btn-primary d-flex align-items-center justify-content-center" style="height: 40px; width: 40px;" onclick="toggle_divs()">
+        <span class="material-symbols-outlined" style="font-size: 24px;">unfold_more</span>
+    </button>
+
+</div>

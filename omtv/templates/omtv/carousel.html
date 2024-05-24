@@ -1,0 +1,39 @@
+
+<div id="{{ id  }}" class="carousel slide" {% if auto_slide %} data-bs-ride="carousel" {% endif %}>
+
+    
+    <div class="carousel-indicators">
+        {% for item in carousel %}
+            <button type="button" 
+                data-bs-target="#{{ id  }}" 
+                data-bs-slide-to="{{ item.index|add:"-1" }}" 
+                class="{% if forloop.first %}active{% endif %}" 
+                aria-current="true" 
+                aria-label="Slide {{ pic.index }}">
+            </button>
+        {% endfor %}
+    </div>
+
+
+
+    <div class="carousel-inner">
+        {% for item in carousel %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <img src="{{ item.url }}" class="d-block mx-auto img-thumbnail" style="height: 230px; object-fit: cover;" alt="...">
+            </div>
+        {% endfor %}
+    </div>
+
+
+    
+    <button class="carousel-control-prev" type="button" data-bs-target="#{{ id  }}" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+
+    <button class="carousel-control-next" type="button" data-bs-target="#{{ id  }}" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+    </div>
+

@@ -2,35 +2,14 @@
 {% load static %}
 {% block title %}Films{% endblock %}
 
+{% block script %}   
+    <script src="{% static 'omtv/js/programmes.js' %}"></script>
+{% endblock %}
+
 {% block page_content %}
 
-    <form id="mon_form" method="post">
-        {% csrf_token %}        
-        <input type="hidden" name="crit_date" id="crit_date" value="">
-    </form>    
-    
-    <div class="d-flex justify-content-center">
-        <ul class="pagination pagination-sm">
 
-        {% for date in dates %}
-
-            {% if date.selected %}
-                <li class="page-item active" style="margin: 10px;" >
-                    <a class="page-link" href="#">{{ date.name }}</a>
-                </li>
-            {% else %}            
-                <li class="page-item">
-                    <a class="page-link" href="#" style="margin: 10px;" 
-                            onclick="event.preventDefault();
-                            document.getElementById('crit_date').value = '{{ date.code }}'; 
-                            document.getElementById('mon_form').submit();"
-                            >{{ date.name }}
-                    </a>
-                </li>
-            {% endif %}        
-        {% endfor %}
-        </ul>
-    </div>
+    {% include './programmes_dates.html' with dates=dates %}
 
 
     {% for tranche, programmes in grouped_programmes.items %}
@@ -38,7 +17,7 @@
         <center><label class="tranche">{{ tranche }}</label></center>
 
         {% for programme in programmes %}
-            {% include './programme_item.html' with item=programme visuel=visuel %}        
+            {% include './programme_item.html' with item=programme visuel=visuel %}
         {% endfor %}
     {% endfor %}
 

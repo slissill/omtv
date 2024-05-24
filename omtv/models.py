@@ -1,4 +1,5 @@
 from django.db import models
+import json
 
 '''
 Pwd for mysql on pythonanywhere : beatles?pa
@@ -77,7 +78,7 @@ class Programme(models.Model):
     @property
     def hdeb(self): return self.start.strftime("%H:%M")
     @property
-    def hfin(self): return self.stop.strftime("%H:%M")
+    def hfin(self): return self.stop.strftime("%H:%M")    
     @property
     def duree(self):
         difference = self.stop - self.start
@@ -85,6 +86,9 @@ class Programme(models.Model):
         minutes, _ = divmod(seconds, 60)
         duree_formatee = f"{heures:02}h{minutes:02}"
         return duree_formatee[1:]    
+    
+    @property
+    def hdeb_and_duree(self): return f"{self.hdeb} {self.duree}"
     @property
     def tranche(self):
         if self.hdeb >= "00:00" and self.hdeb <= "05:59" :      return "Nuit"
@@ -93,7 +97,71 @@ class Programme(models.Model):
         elif self.hdeb >= "20:00" and self.hdeb <= "21:29" :    return "Soirée 1"
         else :                                                  return "Soirée 2"
 
-    
+    def get_json_data(self, prop):
+        if self.json_datas and prop in self.json_datas:           
+            return self.json_datas[prop]
+        else:
+            return ""
+
+    @property
+    def imdb_id(self): return self.get_json_data('imdb_id')
+    @property
+    def imdb_url(self): return f"https://www.imdb.com/title/{self.get_json_data('imdb_id')}" 
+    @property
+    def homepage(self): return self.get_json_data('homepage')
+    @property
+    def poster_path(self): return self.get_json_data('poster_path')
+    @property
+    def poster_url_original(self): return f"https://image.tmdb.org/t/p/original{self.get_json_data('poster_path')}" 
+    @property
+    def poster_url_w500(self): return f"https://image.tmdb.org/t/p/w500{self.get_json_data('poster_path')}" 
+    @property
+    def release_date(self): return self.get_json_data('release_date')
+    @property
+    def release_year(self): return self.release_date.split('-')[0] if self.release_date else ''    
+    @property
+    def vote_average(self): return self.get_json_data('vote_average')
+    @property
+    def popularity(self): return self.get_json_data('popularity')
+    @property
+    def vote_count(self): return self.get_json_data('vote_count')
+    @property
+    def countries(self):
+        if self.json_datas and 'origin_country' in self.json_datas:           
+            return ", ".join(self.json_datas['origin_country'])
+        else:
+            return ""
+    @property
+    def year_and_countries(self): return f"{self.release_year} - {self.countries}"
+
+    @property
+    def carousel(self):
+        sources = []        
+        if self.poster_url_w500:
+            sources.append(self.poster_url_w500)
+        if self.visuel:
+            sources.append(self.visuel)
+
+        carousel_items = [{'index': idx + 1, 'url': url} for idx, url in enumerate(sources)]
+        return carousel_items
+
+    def actors(self):
+        if self.json_datas and 'actors' in self.json_datas:           
+            return ", ".join(self.json_datas['actors'][:4])
+        else:
+            return ""
+
+
+    # @property
+    # def actors(self):
+    #     data = json.loads(self.json_datas)
+    #     return data.get('actors', [])
+    # @property
+    # def genres(self):
+    #     data = json.loads(self.json_datas)
+    #     return data.get('genres', [])
+    # @property
+
 
 #******************************************************
 # Class Import

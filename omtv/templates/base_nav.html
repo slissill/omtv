@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
   <nav class="navbar navbar-expand-md bg-dark navbar-dark">
@@ -16,6 +17,13 @@
         <li class="nav-item"><a class="nav-link" href="{% url 'omtv:programmes' %}">Films</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'omtv:preferences' %}">Preferences</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'omtv:dashboard' %}"><i class="material-icons">settings</i></a></li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="https://www.imdb.com/">
+            <img width="70px" src="{% static 'omtv/images/TMDB.SVG' %}" alt="IMDB" title="IMDB">
+          </a>
+        </li>
+
 
         <!-- {% if user.is_authenticated %}
           <li class="nav-item">Connecté sous {{ user.username }}</li>

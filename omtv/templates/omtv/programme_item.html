@@ -5,12 +5,17 @@
 
 
 <div class="container">
-    <button type="button" class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#programme-{{ item.id }}" style="width: 100%; margin:3px; white-space: normal;">
+    <button type="button" 
+        class="btn btn-info" 
+        data-bs-toggle="collapse" 
+        data-bs-target="#programme-{{ item.id }}" 
+        style="width: 100%; margin:3px; white-space: normal;"
+        onclick="scrollToBottom('{{ item.id }}')"
+        >
+        
         <div class="row">
 
             <div class="col-sm-12" >
-
-
 
                 <style>
                     table {
@@ -43,20 +48,22 @@
                             alt="{{ item.channel }}" 
                             title="{{ item.channel }}" 
                             style="border: 0px solid black; height: 40px;">
+                            <!-- <span class="programme-property">{{ item.hdeb_and_duree }}</span> -->
                         </td>
 
                         <td>                            
-                            <span class="programme-title">{{ item.title }}</span> 
-                            <!-- <span class="programme-title">{{ item.tranche }}</span>  -->
+                            <span class="programme-title">{{ item.title }}</span>
                         </td>
+
                         <td>
                             <p class="programme-property-strong">{{ item.genre }}</p>
-                            <p class="programme-property">{{ item.hdeb }} &nbsp; {{ item.duree }}</p>
+                            <p class="programme-property-strong">{{ item.hdeb_and_duree }}</p>
+                            <p class="programme-property-strong">{{ item.year_and_countries }}</p>                            
                         </td>
 
                     </tr>
                     {% if visuel %} 
-                    <tr>
+                    <tr>                        
                         <td colspan="3">
                             <img width="70px" src="{% static 'omtv/images/TMDB.SVG' %}" alt="TMDB" title="TMDB">
                             <img class="img-rounded" src="{{item.visuel}}" style="width: 100%;">                     
@@ -74,13 +81,16 @@
     </button>
 
 
-    <div id="programme-{{ item.id }}" class="collapse" style="padding: 10px;">
-        <p>{{ item.description }}</p>
-        <!-- <img class="img-rounded" src="{{item.visuel}}" style="width: 100%;">  -->
+    <div id="programme-{{ item.id }}" class="collapse" my_type="collapsable" style="padding: 10px;">
+        <a href="{{item.imdb_url}}"><img width="70px" src="{% static 'omtv/images/TMDB.SVG' %}" alt="{{item.title}} sur IMDB" title="{{item.title}} sur IMDB"></a>
 
+        <p class="programme-property-actors">{{ item.actors }}</p>
+        <p class="programme-property-description">{{ item.description }}</p>
+        <!-- <img class="img-rounded" src="{{item.visuel}}" style="width: 100%;">  -->
+        
+        
         {% if not visuel %} 
-            <img width="70px" src="{% static 'omtv/images/TMDB.SVG' %}" alt="TMDB" title="TMDB">
-            <img class="img-thumbnail" src="{{item.visuel}}" style="width: 100%;"> 
+            {% include './carousel.html' with id=item.id carousel=item.carousel auto_slide=False %}
         {% endif %}
         
     </div>
