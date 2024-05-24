@@ -19,13 +19,11 @@
 
 <form method="POST" id="mon-formulaire">
 
+<br>    
 <div style = "text-align: left;">
-    
-
     <button type="submit" name="update" class="btn btn-default">
         <i class="material-icons" style="vertical-align: middle;">arrow_back</i>
     </button>
-    
 </div>
 
 <hr>
@@ -37,7 +35,17 @@
 
 
     {% csrf_token %}
-
+    
+    <div class="d-flex justify-content-start mb-3">
+        <button type="button" class="btn btn-sm btn-outline-primary" onclick="checkAll(true)" style="font-size: 14px;">
+            <i class="material-icons" style="vertical-align: middle; font-size: 16px;">check_box</i>
+        </button>
+        &nbsp;
+        <button type="button" class="btn btn-sm btn-outline-primary ml-2" onclick="checkAll(false)" style="font-size: 14px;">
+            <i class="material-icons" style="vertical-align: middle; font-size: 16px;">check_box_outline_blank</i>
+        </button>    
+    </div>
+    
     <ul class="list-unstyled card-columns" style="column-count: 2;">
         {% for channel in channels %}
         <li style="margin-bottom: 2px;">            
@@ -48,12 +56,6 @@
     </ul>
 </form>
 
-<div class="d-flex justify-content-center">
-
-    <button type="button" class="btn" style="margin-right: 5px;" onclick="checkAll(true)"><i class="material-icons" style="vertical-align: middle;">check_box</i></button>
-    <button type="button" class="btn" style="margin-left: 5px;"onclick="checkAll(false)"><i class="material-icons" style="vertical-align: middle;">check_box_outline_blank</i></button>
-
-</div>
 
 <hr>
 

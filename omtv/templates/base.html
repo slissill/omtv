@@ -25,11 +25,6 @@
     
     {% block script %}{% endblock %}
     <style>
-        body {
-          background-color: #343a40; /* Fond sombre pour le corps */
-          color: #fff; /* Texte en couleur blanche */
-        }
-      
         .navbar {
           background-color: #222; /* Fond sombre pour la barre de navigation */
         }
@@ -97,8 +92,8 @@
 </style>
 
 </HEAD>
-<BODY style="margin: 5px;">
 
+<body class="bg-dark text-light"></body>
   <div class="container bg-dark text-light">
       {% block content %}{% endblock %}
   </div>

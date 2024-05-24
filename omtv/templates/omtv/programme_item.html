@@ -47,8 +47,7 @@
                             src="{{ item.channel.visuel }}"
                             alt="{{ item.channel }}" 
                             title="{{ item.channel }}" 
-                            style="border: 0px solid black; height: 40px;">
-                            <!-- <span class="programme-property">{{ item.hdeb_and_duree }}</span> -->
+                            style="border: 0px solid black; height: 40px;">                            
                         </td>
 
                         <td>                            
@@ -62,14 +61,6 @@
                         </td>
 
                     </tr>
-                    {% if visuel %} 
-                    <tr>                        
-                        <td colspan="3">
-                            <img width="70px" src="{% static 'omtv/images/TMDB.SVG' %}" alt="TMDB" title="TMDB">
-                            <img class="img-rounded" src="{{item.visuel}}" style="width: 100%;">                     
-                        </td>
-                    </tr>
-                    {% endif %}
         
                 </table>
                 
@@ -80,9 +71,12 @@
 
     </button>
 
+    {% if visuel %} 
+        {% include './carousel.html' with id=item.id carousel=item.carousel auto_slide=False %}
+    {% endif %}
 
     <div id="programme-{{ item.id }}" class="collapse" my_type="collapsable" style="padding: 10px;">
-        <a href="{{item.imdb_url}}"><img width="70px" src="{% static 'omtv/images/TMDB.SVG' %}" alt="{{item.title}} sur IMDB" title="{{item.title}} sur IMDB"></a>
+        <a href="{{item.imdb_url}}"><img width="70px" src="{% static '/omtv/images/TMDB.SVG' %}" alt="{{item.title}} sur IMDB" title="{{item.title}} sur IMDB"></a>
 
         <p class="programme-property-actors">{{ item.actors }}</p>
         <p class="programme-property-description">{{ item.description }}</p>

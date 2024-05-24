@@ -6,6 +6,15 @@
 
 {% block content %}
 
+<br>    
+<div style="text-align: left;">
+    <button type="button" class="btn btn-default" onclick="window.history.back()">
+        <i class="material-icons" style="vertical-align: middle;">arrow_back</i>
+    </button>
+</div>
+
+<br>
+
     {% for message in messages %}
         <p style="color:red">{{ message }}</p>
     {% endfor %}
