@@ -72,7 +72,9 @@
     </button>
 
     {% if visuel %} 
+        <div class="mt-1"></div> <!-- Ajoute un espace  -->
         {% include './carousel.html' with id=item.id carousel=item.carousel auto_slide=False %}
+        <div class="mt-2"></div> <!-- Ajoute un espace  -->
     {% endif %}
 
     <div id="programme-{{ item.id }}" class="collapse" my_type="collapsable" style="padding: 10px;">
@@ -84,7 +86,7 @@
         
         
         {% if not visuel %} 
-            {% include './carousel.html' with id=item.id carousel=item.carousel auto_slide=False %}
+            {% include './carousel.html' with id=item.id carousel=item.carousel auto_slide=False %}            
         {% endif %}
         
     </div>
