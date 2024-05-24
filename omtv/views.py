@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .management.commands.import_xml_data import main as import_xml_data_main
+from .management.commands.maj_bdd import main as maj_bdd
 from .models import Programme, Channel, Import
+from .import_imdb_web import get_json_from_title
 from datetime import date, datetime, timedelta
 from django.db.models import Count, F, Max
 from itertools import groupby
@@ -10,6 +11,12 @@ from plotly.offline import plot
 from django.contrib.auth.decorators import login_required
 import json
 
+import requests
+from django.http import JsonResponse
+from django.conf import settings
+
+
+from imdb import IMDb
 #return HttpResponse("update_db_r") 
 
 
@@ -27,7 +34,7 @@ def home(request):
     return render(request, 'omtv/home.html')
 
 def import_xml_data(request):  
-    import_xml_data_main()
+    maj_bdd()
     return redirect ("omtv:programmes")
 
 @login_required
@@ -162,4 +169,5 @@ def preferences(request):
             "channels" : channels
             }
         return render(request, 'omtv/preferences.html', context)
+
 

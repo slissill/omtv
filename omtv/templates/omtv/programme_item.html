@@ -58,6 +58,7 @@
                     {% if visuel %} 
                     <tr>
                         <td colspan="3">
+                            <img width="70px" src="{% static 'omtv/images/TMDB.SVG' %}" alt="TMDB" title="TMDB">
                             <img class="img-rounded" src="{{item.visuel}}" style="width: 100%;">                     
                         </td>
                     </tr>
@@ -78,6 +79,7 @@
         <!-- <img class="img-rounded" src="{{item.visuel}}" style="width: 100%;">  -->
 
         {% if not visuel %} 
+            <img width="70px" src="{% static 'omtv/images/TMDB.SVG' %}" alt="TMDB" title="TMDB">
             <img class="img-thumbnail" src="{{item.visuel}}" style="width: 100%;"> 
         {% endif %}
         

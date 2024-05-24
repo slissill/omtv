@@ -7,7 +7,7 @@ class ChannelAdmin(admin.ModelAdmin):
 class ProgrammeAdmin(admin.ModelAdmin):
     
     #********  config en mode liste ********************
-    list_filter = ('genre', 'channel', )
+    list_filter = ('pdate', 'json_status', 'genre', 'channel', )
     search_fields = ['title', 'genre']
     list_per_page = 50
     readonly_fields = ['created_at', 'updated_at']
@@ -16,7 +16,7 @@ class ProgrammeAdmin(admin.ModelAdmin):
     #fields = ['title', 'genre', 'pdate', 'start', 'stop']              # <= on ne peut pas faire les 2 en meme temps
     fieldsets = [
         ('Timing', {'fields' : ['pdate', 'start', 'stop']}), 
-        ('Autres', {'fields' : ['title', 'genre']}), 
+        ('Autres', {'fields' : ['title', 'genre', 'json_status', 'json_datas']}), 
         ('Audit', {'fields' : ['created_at', 'updated_at']}), 
     ]
 

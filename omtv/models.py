@@ -1,15 +1,21 @@
 from django.db import models
 
 '''
-Pwd for mysql on pythonanywhere : litswd?pa
+Pwd for mysql on pythonanywhere : beatles?pa
 
-=====> pour préparer les instructions sql
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Pour préparer les instructions sql
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 python manage.py makemigrations omtv
 
-=====> Pour vérifier les instructions sql qui vont être générées : (0001 étant le prefixe du fichier 0001_initial.py)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Pour Consulter les actions prévues
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 python manage.py sqlmigrate omtv 0001
 
-=====> Pour Modififier la base
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Pour Modififier la base
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 python manage.py migrate
 
 '''
@@ -49,6 +55,8 @@ class Programme(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE, related_name='fk_Programme_Channel')
+    json_status = models.IntegerField(default=0, verbose_name="Json Status")
+    json_datas = models.JSONField(null=True, blank=True)
 
     class Meta:
         verbose_name = "Programme"
