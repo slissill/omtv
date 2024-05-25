@@ -182,6 +182,10 @@ class Import(models.Model):
         start_str = self.start.strftime("%Y-%m-%d %H:%M:%S")
         if self.end:
             duration = (self.end - self.start).total_seconds()
-            return f"{start_str} : {round(duration, 1)} secondes, {self.count_after - self.count_before} programmes"
+            cnt = self.count_after - self.count_before
+            if (cnt == 0):
+                return f"{start_str} ({round(duration, 1)} s)"
+            else:
+                return f"{start_str} ({round(duration, 1)} s), {cnt} programmes"
         else:
-            return f"{start_str} - No end time"
+            return f"{start_str} - <no end time>"
