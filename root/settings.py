@@ -17,6 +17,10 @@ from pathlib import Path
 #BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Pour la lecture du fichier .env (mes variables d'environnement)
+from dotenv import load_dotenv
+load_dotenv()
+
 #xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 # Obtient un bool qui indique si je suis dans l'environnement pythonanywhere
 # Il faut préalablement ajouter dans .wsgi une variable d'environnement qui porte cette clée
@@ -27,11 +31,12 @@ IS_PA = 'PYTHONANYWHERE_DOMAIN' in os.environ
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-f^am&fk1^fd(hi9yy7rs(x=+*)s%+l-8b3x)jf1mvn4ftd(=1p'
+SECRET_KEY = os.environ.get('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
 if IS_PA:
     DEBUG = False
     ALLOWED_HOSTS = ['slissill.pythonanywhere.com']
@@ -106,7 +111,7 @@ if IS_PA:
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'slissill$omtv',
             'USER': 'slissill',
-            'PASSWORD': 'litswd?pa',
+            'PASSWORD': os.environ.get('BDD_PWD'),
             'HOST': 'slissill.mysql.pythonanywhere-services.com',
             }
         }
@@ -116,7 +121,7 @@ else:
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'omtv',
             'USER': 'root',
-            'PASSWORD': 'admin',
+            'PASSWORD': os.environ.get('BDD_PWD_LOCAL'),
             'HOST': 'localhost',
             'PORT': '',             # Laissez vide pour utiliser le port par défaut (3306)
             }

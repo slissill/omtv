@@ -1,5 +1,11 @@
+import os
 import requests
 from datetime import datetime
+
+# Charge la constante de la clé API IMDB
+IMDB_API_KEY = os.environ.get('IMDB_API_KEY')
+
+
 def get_json_from_title(title, json_result):
     try:
         print ("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
@@ -23,11 +29,10 @@ def get_json_from_title(title, json_result):
         print(f"{title} : Une erreur a été déclenchée: {str(e)}")
         return 3
 
-def my_imdib_api_key(): return 'a1412b072a662bfa071a119e96d5699d'
 
 
 def get_imdb_movie_id(title):
-    response = requests.get(f'https://api.themoviedb.org/3/search/movie?api_key={my_imdib_api_key()}&query={title}')
+    response = requests.get(f'https://api.themoviedb.org/3/search/movie?api_key={IMDB_API_KEY}&query={title}')
     if response.status_code != 200: return -1
     datas = response.json()
     if not datas['results']: return -1
@@ -35,7 +40,7 @@ def get_imdb_movie_id(title):
 
 
 def get_imdb_movie_header(id): 
-    response = requests.get(f'https://api.themoviedb.org/3/movie/{id}?api_key={my_imdib_api_key()}')
+    response = requests.get(f'https://api.themoviedb.org/3/movie/{id}?api_key={IMDB_API_KEY}')
     if response.status_code != 200: return None
     json_brut = response.json()
     json_light = {
@@ -54,6 +59,6 @@ def get_imdb_movie_header(id):
 
 
 def get_imdb_movie_actors(id): 
-    response = requests.get(f'https://api.themoviedb.org/3/movie/{id}/credits?api_key={my_imdib_api_key()}')
+    response = requests.get(f'https://api.themoviedb.org/3/movie/{id}/credits?api_key={IMDB_API_KEY}')
     if response.status_code != 200: return None
     return [actor['name'] for actor in response.json().get('cast', [])][:5]
