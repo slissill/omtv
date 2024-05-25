@@ -13,13 +13,48 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
+
+print ('<<<<<<< SETTINGS.PY >>>>>>>>>>>')
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 #BASE_DIR = Path(__file__).resolve().parent.parent
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Pour la lecture du fichier .env (mes variables d'environnement)
+'''
+BASE_DIR (local)            => C:\ZDEPOT\omtv
+BASE_DIR (pythonanywhere)   => home/slissill/omtv
+   
+
+BASE_DIR
+    |----[.git]
+    |----[accounts]
+    |----[omtv]
+    |----[root]
+           |----.env           
+           |----settings.py
+           |----wsgi.py
+           |...
+
+    |----.gitignore
+    |----manage.py
+    |----requirements.txt
+
+'''
+
+SETTINGS_PATH   = os.path.abspath(__file__)
+PROJECT_DIR     = os.path.dirname(SETTINGS_PATH)
+BASE_DIR        = os.path.dirname(PROJECT_DIR)
+ENV_PATH        = os.path.join(PROJECT_DIR, '.env')     
+
+print ("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW")
+print (f"SETTINGS_PATH  : {SETTINGS_PATH}")
+print (f"PROJECT_PATH   : {PROJECT_DIR}")
+print (f"BASE_DIR       : {BASE_DIR}")
+print (f"ENV_PATH       : {ENV_PATH}")
+print ("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW")
+
+# Lit les key-value du fichier.env pour les loader dans les variables d'environnements
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv(ENV_PATH)
 
 #xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 # Obtient un bool qui indique si je suis dans l'environnement pythonanywhere
@@ -42,7 +77,7 @@ if IS_PA:
     ALLOWED_HOSTS = ['slissill.pythonanywhere.com']
 else:
     DEBUG = True
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 ###################### SWITCH for pythonanywhere   ######################
 #DEBUG = True
