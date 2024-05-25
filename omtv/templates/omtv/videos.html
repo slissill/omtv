@@ -1,23 +1,43 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}Videos {{programme.title}}{% endblock %}
-
-{% block script %}
-
-{% endblock %}
-
 {% block content %}
 
-    <h3>{{programme.title}} ({{programme.id}})</h3>
+    <h5>{{programme.title}}</h5>
     <hr>
 
-    {% for video in programme.videos %}
-    <div class="video-container">
-        <!-- Intégrez le lecteur YouTube avec la clé de la vidéo -->
-        <iframe src="https://www.youtube.com/embed/{{ video.key }}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        <!-- Affichez le nom et le type de la vidéo -->
-        <p>{{ video.name }} - {{ video.type }}</p>
+    <div class="container mt-3">        
+        {% for video_type, count in programme.videos_types.items %}
+            <a href="{% url 'omtv:videos' %}?id={{ programme.id }}&type={{ video_type }}" 
+                class="btn btn-primary {% if crit_video_type == video_type %}active{% endif %}"
+                style="margin-bottom: 5px;">
+                {{ video_type }} <span class="badge bg-secondary">{{ count }}</span>
+            </a>
+        {% endfor %}
     </div>
-    {% endfor %}
+      
+    <hr>
 
-{% endblock %}
+    <div class="container mt-3">        
+        {% for video in programme.videos %}
+            {% if video.type == crit_video_type %}
+
+            <a href="{% url 'omtv:videos' %}?id={{ programme.id }}&type={{ crit_video_type }}&key={{video.key}}" 
+                class="btn btn-primary {% if crit_video_key == video.key %}active{% endif %}"
+                style="margin-bottom: 5px; font-size: 14px;">
+                {{ video.name }}
+            </a>
+            
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <hr>
+    
+    <div class="container-fluid mt-3 d-flex justify-content-center align-items-center">
+        <div class="embed-responsive embed-responsive-16by9 border border-secondary">            
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ crit_video_key }}?autoplay=1" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>        
+    </div>
+
+    {% endblock %}

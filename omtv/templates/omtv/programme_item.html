@@ -82,10 +82,14 @@
         
         {% if user.is_authenticated %}
         &nbsp;
-        <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=1">More...</a> | 
-        <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=0">More++...</a>
+        <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=1">More</a> | 
+        <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=0">More++</a> |
+
+        <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=1&jsonoutput=1">Json</a> |
+        <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=0&jsonoutput=1">Json++</a>
+
         {% endif %}
-        
+
         {% if programme.videos %}
          | <a href="{% url 'omtv:videos' %}?id={{item.id}}">VIDEOS</a>
         {% endif %}

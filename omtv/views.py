@@ -173,15 +173,19 @@ def get_imdb_datas(request):
     if request.method == 'GET':
         title = request.GET.get('title', 'inception')
         bln_light = request.GET.get('light', '0') != '0'
+        bln_jsonoutput = request.GET.get('jsonoutput', '0') != '0'
         json_datas = {}
         json_status = get_json_from_title(title, json_datas, light=bln_light) 
         
         if (json_status == 1):
-            replace_jpg_urls(json_datas)
-            html_content = json2html.convert(json = json_datas, clubbing=True, encode=False, table_attributes='border="1"')
-            html_content = html_content.replace("#DEBUT#", "<img width=300 src='https://image.tmdb.org/t/p/original")
-            html_content = html_content.replace("#FIN#", "></img>")
-            return render(request, 'omtv/imdb_datas.html', {'html_content': html_content, 'title' : title})            
+            if bln_jsonoutput == True:
+                return JsonResponse({'movie': json_datas})
+            else:
+                replace_jpg_urls(json_datas)
+                html_content = json2html.convert(json = json_datas, clubbing=True, encode=False, table_attributes='border="1"')
+                html_content = html_content.replace("#DEBUT#", "<img width=300 src='https://image.tmdb.org/t/p/original")
+                html_content = html_content.replace("#FIN#", "></img>")
+                return render(request, 'omtv/imdb_datas.html', {'html_content': html_content, 'title' : title})            
 
     return JsonResponse({'Failed': title}, status=404)
 
@@ -203,9 +207,23 @@ def replace_jpg_urls(data):
 def videos(request):
     if request.method == 'GET':
         id = request.GET.get('id', '0')
+        crit_video_type=request.GET.get('type')
+        crit_video_key=request.GET.get('key')
+        
         programme = get_object_or_404(Programme, id=id)
+
+        if crit_video_type == None:
+            videos_types = programme.videos_types
+            crit_video_type = next(iter(videos_types))  # Premier type de vidéo
+            
+        if crit_video_key == None:
+            filtered_videos = [video for video in programme.videos if video['type'] == crit_video_type]
+            crit_video_key = filtered_videos[0]['key'] # Premiere vidéo du type
+
         context = {
-            'programme': programme
+            'programme': programme, 
+            'crit_video_type' : crit_video_type, 
+            'crit_video_key' : crit_video_key, 
             }
         return render(request, 'omtv/videos.html', context)
 

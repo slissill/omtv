@@ -1,5 +1,6 @@
 from django.db import models
-import json
+from collections import Counter
+
 
 '''
 Pwd for mysql on pythonanywhere : beatles?pa
@@ -190,7 +191,13 @@ class Programme(models.Model):
             'type': video['type']
         } for video in self.json_datas.get('videos', [])]
 
+    @property
+    def videos_types(self):
+        if not self.json_datas or 'videos' not in self.json_datas:
+            return {}
 
+        video_types = [video['type'] for video in self.json_datas['videos']]
+        return dict(Counter(video_types))
 
 #******************************************************
 # Class Import
