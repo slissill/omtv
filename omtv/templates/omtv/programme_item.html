@@ -79,10 +79,16 @@
 
     <div id="programme-{{ item.id }}" class="collapse" my_type="collapsable" style="padding: 10px;">
         <a href="{{item.imdb_url}}"><img width="70px" src="{% static 'omtv/images/TMDB.svg' %}" alt="{{item.title}} sur IMDB" title="{{item.title}} sur IMDB"></a>
+        
+        {% if user.is_authenticated %}
         &nbsp;
         <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=1">More...</a> | 
-        <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=0">More++...</a> |   
-        <a href="{% url 'omtv:videos' %}?id={{item.id}}">VIDEOS</a> | 
+        <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=0">More++...</a>
+        {% endif %}
+        
+        {% if programme.videos %}
+         | <a href="{% url 'omtv:videos' %}?id={{item.id}}">VIDEOS</a>
+        {% endif %}
 
         <p class="programme-property-actors">{{ item.actors_name }}</p>
         <p class="programme-property-description">{{ item.description }}</p>
