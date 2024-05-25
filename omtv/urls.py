@@ -11,7 +11,8 @@ urlpatterns = [
     path('preferences', views.preferences, name='preferences'),
     path('import_xml_data', views.import_xml_data, name='import_xml_data'),
     path('dashboard', views.dashboard, name='dashboard'),
-    path('stats', views.stats, name='stats'),        
+    path('stats', views.stats, name='stats'),    
+    path('get_imdb_datas/', views.get_imdb_datas, name='get_imdb_datas'),
 ]
 
 '''

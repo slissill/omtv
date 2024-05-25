@@ -38,7 +38,7 @@ def main():
     programmes = Programme.objects.filter(json_status=0, pdate__gte=current_date)
     for p in programmes:
         json = {}
-        p.json_status = get_json_from_title_web (p.title, json)
+        p.json_status = get_json_from_title_web (p.title, json, light=True)
         #p.json_status = get_json_from_title_api (p.title, json, inst_imdb)
         p.json_datas = json
         p.save()

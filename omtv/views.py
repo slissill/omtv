@@ -10,13 +10,11 @@ import plotly.graph_objs as go
 from plotly.offline import plot
 from django.contrib.auth.decorators import login_required
 import json
-
+from json2html import *
 import requests
 from django.http import JsonResponse
 from django.conf import settings
 
-
-from imdb import IMDb
 #return HttpResponse("update_db_r") 
 
 
@@ -171,3 +169,33 @@ def preferences(request):
         return render(request, 'omtv/preferences.html', context)
 
 
+def get_imdb_datas(request):    
+    if request.method == 'GET':
+        title = request.GET.get('title', 'inception')
+        bln_light = request.GET.get('light', '0') != '0'
+        json_datas = {}
+        json_status = get_json_from_title(title, json_datas, light=bln_light) 
+        
+        if (json_status == 1):
+            replace_jpg_urls(json_datas)
+            html_content = json2html.convert(json = json_datas, clubbing=True, encode=False, table_attributes='border="1"')
+            html_content = html_content.replace("#DEBUT#", "<img width=300 src='https://image.tmdb.org/t/p/original")
+            html_content = html_content.replace("#FIN#", "></img>")
+            return render(request, 'omtv/imdb_datas.html', {'html_content': html_content, 'title' : title})            
+
+    return JsonResponse({'Failed': title}, status=404)
+
+
+def replace_jpg_urls(data):
+    if isinstance(data, dict):
+        for key, value in data.items():
+            if isinstance(value, str) and (value.endswith('.jpg') or value.endswith('.png')):
+                data[key] = f'#DEBUT#{value}#FIN#'
+            elif isinstance(value, (dict, list)):
+                replace_jpg_urls(value)
+    elif isinstance(data, list):
+        for index, item in enumerate(data):
+            if isinstance(item, str) and (item.endswith('.jpg') or item.endswith('.png')):
+                data[index] = f'#DEBUT#{item}#FIN#'
+            elif isinstance(item, (dict, list)):
+                replace_jpg_urls(item)

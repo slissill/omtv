@@ -44,6 +44,9 @@ class Channel(models.Model):
 # Class Programme
 #******************************************************
 class Programme(models.Model):
+
+    URL_PIC = ""
+
     # Comme je ne lui précise pas de PK, le champ id (pk) sera automatiquement généré
     start = models.DateTimeField(verbose_name="Début")    
     stop = models.DateTimeField(verbose_name="Fin")
@@ -103,6 +106,10 @@ class Programme(models.Model):
         else:
             return ""
 
+    def ImdbUrlImage(self, image) : return f"https://image.tmdb.org/t/p/original{image}" 
+    def ImdbUrlImage500(self, image) : return f"https://image.tmdb.org/t/p/w500{image}" 
+
+
     @property
     def imdb_id(self): return self.get_json_data('imdb_id')
     @property
@@ -111,10 +118,24 @@ class Programme(models.Model):
     def homepage(self): return self.get_json_data('homepage')
     @property
     def poster_path(self): return self.get_json_data('poster_path')
+
+
+    # @property
+    # def poster_url_original(self): return f"https://image.tmdb.org/t/p/original{self.get_json_data('poster_path')}" 
+    # @property
+    # def poster_url_w500(self): return f"https://image.tmdb.org/t/p/w500{self.get_json_data('poster_path')}"
+
+
+
+
     @property
-    def poster_url_original(self): return f"https://image.tmdb.org/t/p/original{self.get_json_data('poster_path')}" 
+    def poster_url_original(self): return self.ImdbUrlImage(self.get_json_data('poster_path')) 
     @property
-    def poster_url_w500(self): return f"https://image.tmdb.org/t/p/w500{self.get_json_data('poster_path')}" 
+    def poster_url_w500(self): return self.ImdbUrlImage500(self.get_json_data('poster_path')) 
+
+
+
+
     @property
     def release_date(self): return self.get_json_data('release_date')
     @property
@@ -134,6 +155,21 @@ class Programme(models.Model):
     @property
     def year_and_countries(self): return f"{self.release_year} - {self.countries}"
 
+
+    
+    def actors_name(self):
+        if self.json_datas and 'actors' in self.json_datas:                       
+            return ", ".join([actor['name'] for actor in self.json_datas['actors']])
+        else:
+            return ""
+
+    
+    def actors_pic(self):
+        if self.json_datas and 'actors' in self.json_datas:                       
+            return [self.ImdbUrlImage500(actor['profile_path']) for actor in self.json_datas['actors'] if actor.get('profile_path')]
+        else:
+            return []
+
     @property
     def carousel(self):
         sources = []        
@@ -142,14 +178,10 @@ class Programme(models.Model):
         if self.visuel:
             sources.append(self.visuel)
 
+        sources.extend(self.actors_pic())
+
         carousel_items = [{'index': idx + 1, 'url': url} for idx, url in enumerate(sources)]
         return carousel_items
-
-    def actors(self):
-        if self.json_datas and 'actors' in self.json_datas:           
-            return ", ".join(self.json_datas['actors'][:4])
-        else:
-            return ""
 
 
     # @property
