@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Videos {{programme.title}}{% endblock %}
+
+{% block script %}
+
+{% endblock %}
+
+{% block content %}
+
+    <h3>{{programme.title}} ({{programme.id}})</h3>
+    <hr>
+
+    {% for video in programme.videos %}
+    <div class="video-container">
+        <!-- Intégrez le lecteur YouTube avec la clé de la vidéo -->
+        <iframe src="https://www.youtube.com/embed/{{ video.key }}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <!-- Affichez le nom et le type de la vidéo -->
+        <p>{{ video.name }} - {{ video.type }}</p>
+    </div>
+    {% endfor %}
+
+{% endblock %}

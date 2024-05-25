@@ -45,8 +45,6 @@ class Channel(models.Model):
 #******************************************************
 class Programme(models.Model):
 
-    URL_PIC = ""
-
     # Comme je ne lui précise pas de PK, le champ id (pk) sera automatiquement généré
     start = models.DateTimeField(verbose_name="Début")    
     stop = models.DateTimeField(verbose_name="Fin")
@@ -163,10 +161,10 @@ class Programme(models.Model):
         else:
             return ""
 
-    
+
     def actors_pic(self):
         if self.json_datas and 'actors' in self.json_datas:                       
-            return [self.ImdbUrlImage500(actor['profile_path']) for actor in self.json_datas['actors'] if actor.get('profile_path')]
+            return [{'url' : self.ImdbUrlImage500(actor['profile_path']), 'name' : actor['name']  } for actor in self.json_datas['actors'] if actor.get('profile_path')]
         else:
             return []
 
@@ -174,25 +172,24 @@ class Programme(models.Model):
     def carousel(self):
         sources = []        
         if self.poster_url_w500:
-            sources.append(self.poster_url_w500)
+            sources.append({'url' : self.poster_url_w500,  'name' : ''})
         if self.visuel:
-            sources.append(self.visuel)
+            sources.append({'url' : self.visuel, 'name' : ''})
 
         sources.extend(self.actors_pic())
-
-        carousel_items = [{'index': idx + 1, 'url': url} for idx, url in enumerate(sources)]
+        
+        carousel_items = [{'index': idx + 1, 'url': source['url'], 'name': source['name']} for idx, source in enumerate(sources)]
         return carousel_items
+        
 
+    @property
+    def videos(self):
+        return [{
+            'key': video['key'],
+            'name': video['name'],
+            'type': video['type']
+        } for video in self.json_datas.get('videos', [])]
 
-    # @property
-    # def actors(self):
-    #     data = json.loads(self.json_datas)
-    #     return data.get('actors', [])
-    # @property
-    # def genres(self):
-    #     data = json.loads(self.json_datas)
-    #     return data.get('genres', [])
-    # @property
 
 
 #******************************************************

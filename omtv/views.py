@@ -199,3 +199,14 @@ def replace_jpg_urls(data):
                 data[index] = f'#DEBUT#{item}#FIN#'
             elif isinstance(item, (dict, list)):
                 replace_jpg_urls(item)
+
+def videos(request):
+    if request.method == 'GET':
+        id = request.GET.get('id', '0')
+        programme = get_object_or_404(Programme, id=id)
+        context = {
+            'programme': programme
+            }
+        return render(request, 'omtv/videos.html', context)
+
+    return JsonResponse({'Failed': 'Failed'}, status=404)

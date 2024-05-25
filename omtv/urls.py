@@ -13,6 +13,7 @@ urlpatterns = [
     path('dashboard', views.dashboard, name='dashboard'),
     path('stats', views.stats, name='stats'),    
     path('get_imdb_datas/', views.get_imdb_datas, name='get_imdb_datas'),
+    path('videos/', views.videos, name='videos'),
 ]
 
 '''
