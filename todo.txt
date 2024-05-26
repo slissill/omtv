@@ -1,0 +1,8 @@
+liste des dates avec un contole calendrier
+un panneau overlaps a gauche (au lieu de nabar)
+programmes.html en get au lieu de post
+visionneuse largeur
+carousel affiche le max d'image (selon la largeur)
+l'accordeon que pour un seul film (si j'ouvre un, l'autre de ferme)
+Fiche Film
+

@@ -78,19 +78,18 @@ def stats(request):
         }
     return render(request, 'omtv/stats.html', context)    
 
-def get_dates(selected_date):
+def get_dates(selected_date):    
 
-    dates = Programme.objects.order_by('pdate').values_list('pdate', flat=True).distinct()
-    jours_semaine = ['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim']
     today = datetime.now().date()
     today_plus = today  + timedelta(days=3)
+    dates = Programme.objects.filter(pdate__range=[today, today_plus], start__time__gte='20:00').order_by('pdate').values_list('pdate', flat=True).distinct()
+    jours_semaine = ['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim']
     formatted_dates = [
                             {'name': f"{jours_semaine[date.weekday()]} {date.day}", 
                              'code': date.strftime('%Y%m%d'),  
                              'selected': date.strftime('%Y%m%d') == selected_date, 
-                            } for date in dates if date >= today and date < today_plus
-                    ]
-    #for date in dates if date >= datetime.now().date() - timedelta(days=1)
+                            } for date in dates 
+                    ]    
     return formatted_dates
 
 def programmes(request):
