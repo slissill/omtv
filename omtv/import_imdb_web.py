@@ -69,7 +69,7 @@ def get_imdb_movie_actors(id, light):
     json_brut = response.json()
     if light:
         json_light = []
-        for item in json_brut.get('cast', [])[:5]:
+        for item in json_brut.get('cast', [])[:10]:
             json_light.append({
                 'name': item['name'],
                 'character': item['character'],
