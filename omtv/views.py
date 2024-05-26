@@ -95,11 +95,11 @@ def get_dates(selected_date):
 def programmes(request):
     print_request(request)
     
-    if request.method == "POST":
-        seleted_date = request.POST.get('crit_date')
+    if request.method == "GET":
+        selected_date = request.GET.get('date')
     else:
-        seleted_date = datetime.now().date().strftime('%Y%m%d')
-
+        selected_date = datetime.now().date().strftime('%Y%m%d')
+        
     cookie = request.COOKIES.get("channels")
     channels = []
     if cookie == None: 
@@ -109,7 +109,7 @@ def programmes(request):
 
 
     progs = Programme.objects.filter(
-        pdate = datetime.strptime(seleted_date, "%Y%m%d"), 
+        pdate = datetime.strptime(selected_date, "%Y%m%d"), 
         start__time__gte='20:00', 
         channel__in=channels
         ).order_by('start', 'channel__sort')
@@ -122,7 +122,7 @@ def programmes(request):
     visuel = request.COOKIES.get("visuel") == "true"
 
     context = {"grouped_programmes": grouped_programmes,
-               "dates" : get_dates(seleted_date), 
+               "dates" : get_dates(selected_date), 
                "visuel" : visuel}
     return render(request, 'omtv/programmes.html', context)
 
