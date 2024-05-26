@@ -8,7 +8,7 @@ from omtv.import_xml import import_xml
 from omtv.import_imdb_web import get_json_from_title as get_json_from_title_web
 from omtv.import_imdb_api import get_json_from_title as get_json_from_title_api
 from imdb import IMDb
-
+from omtv.queries import *
 '''
 
 Dans pythonanywhere pour configurer la task il faut saisir : 
@@ -30,8 +30,10 @@ def main():
     new_import = Import(start=timezone.now(), count_before=Programme.objects.count())
     new_import.save()
 
-    # Import des programmes TNT    
-    import_xml()
+    # Import des programmes TNT
+    min_max_times = [None, None]
+    import_xml(min_max_times)    
+    min_start, max_start = min_max_times    
     
     # Récupération des extras-info depuis IMDB
     current_date = datetime.now()
@@ -43,7 +45,17 @@ def main():
         p.json_datas = json
         p.save()
 
+    
+    # Programmes en doublon (chevauchement) : on delete (les vieilles données)
+    ids_to_delete = overlapping_programmes_to_delete(min_start.date())
+    programmes_a_supprimer = Programme.objects.filter(id__in=ids_to_delete)
+    programmes_a_supprimer.delete()
+
+
     # Log Import END
     new_import.end = timezone.now()
     new_import.count_after =  Programme.objects.count()
+    new_import.deleted = len(ids_to_delete)
+    new_import.min_start = min_start
+    new_import.max_start = max_start
     new_import.save()

@@ -21,7 +21,7 @@ class ProgrammeAdmin(admin.ModelAdmin):
     ]
 
 class ImportAdmin(admin.ModelAdmin):
-    # list_display = ('start', 'end', 'count_before', 'count_after')
+    list_display = ('start', 'end', 'count_before', 'count_after', 'deleted', 'min_start', 'max_start')
     list_filter = ('start', 'end')
     search_fields = ('start',)
     date_hierarchy = 'start'

@@ -4,12 +4,20 @@ from datetime import datetime
 from omtv.models import Channel, Programme
 
 
-def import_xml():
+def import_xml(min_max_times):
 
     url = "https://xmltvfr.fr/xmltv/xmltv_tnt.xml"
     response = requests.get(url)
     xml_content = response.content
     root = ET.fromstring(xml_content)
+
+    # *****************************************
+    # Pour les stats de l'import
+    # *****************************************    
+    items = root.findall('.//programme')
+    start_times = [datetime.strptime(program.attrib['start'][:14], "%Y%m%d%H%M%S") for program in root.findall('.//programme')]
+    min_max_times[0] = min(start_times)
+    min_max_times[1] = max(start_times)
 
     # *****************************************
     # CHANNELS 
@@ -29,12 +37,8 @@ def import_xml():
     # PROGRAMMES
     # *****************************************    
     items = root.findall('.//programme[category="Film"]')
-    cnt = len(items)
-    idx = 0
     for item in items:
-
-        title = get_xml_text(item, "title"), 
-        idx+=1
+        title = get_xml_text(item, "title")         
 
         # print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
         # print (f"{idx}/{cnt} => {title}")

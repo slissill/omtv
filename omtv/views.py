@@ -14,6 +14,7 @@ from json2html import *
 import requests
 from django.http import JsonResponse
 from django.conf import settings
+from .queries import *
 
 #return HttpResponse("update_db_r") 
 
@@ -185,9 +186,10 @@ def get_imdb_datas(request):
                 html_content = json2html.convert(json = json_datas, clubbing=True, encode=False, table_attributes='border="1"')
                 html_content = html_content.replace("#DEBUT#", "<img width=300 src='https://image.tmdb.org/t/p/original")
                 html_content = html_content.replace("#FIN#", "></img>")
-                return render(request, 'omtv/imdb_datas.html', {'html_content': html_content, 'title' : title})            
+                return render(request, 'omtv/json2html.html', {'html_content': html_content, 'title' : title})            
 
     return JsonResponse({'Failed': title}, status=404)
+
 
 
 def replace_jpg_urls(data):
@@ -228,3 +230,14 @@ def videos(request):
         return render(request, 'omtv/videos.html', context)
 
     return JsonResponse({'Failed': 'Failed'}, status=404)
+
+def debug_datas(request):
+    overlapping_programmes_data = overlapping_programmes()
+    ids_to_delete = overlapping_programmes_to_delete()
+    ids_to_delete_str = ", ".join(str(id) for id in ids_to_delete)
+    html_content = f"<strong>IDs to delete:</strong> {ids_to_delete_str}<br><br>"
+
+    for overlap in overlapping_programmes_data:
+        html_content += json2html.convert(json=overlap) + "<br><br>"
+    return render(request, 'omtv/json2html.html', {'html_content': html_content, 'title': 'Chevauchements'})
+

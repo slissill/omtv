@@ -73,7 +73,11 @@ class Programme(models.Model):
     def create_or_update(cls, **kwargs): return cls.objects.get_or_create(**kwargs)
 
     @property
-    def xdate(self): return self.start.date()
+    def tojson(self): 
+        return {
+            'title': self.title,
+            'channel_id': self.channel_id,
+            }
 
     @property
     def date_str(self): return self.start.strftime("%Y-%m-%d")
@@ -105,8 +109,8 @@ class Programme(models.Model):
         else:
             return ""
 
-    def ImdbUrlImage(self, image) : return f"https://image.tmdb.org/t/p/original{image}" 
-    def ImdbUrlImage500(self, image) : return f"https://image.tmdb.org/t/p/w500{image}" 
+    def ImdbUrlImage(self, image) : return f"https://image.tmdb.org/t/p/original{image}"  if image != "" else ""
+    def ImdbUrlImage500(self, image) : return f"https://image.tmdb.org/t/p/w500{image}" if image != "" else ""
 
 
     @property
@@ -117,24 +121,10 @@ class Programme(models.Model):
     def homepage(self): return self.get_json_data('homepage')
     @property
     def poster_path(self): return self.get_json_data('poster_path')
-
-
-    # @property
-    # def poster_url_original(self): return f"https://image.tmdb.org/t/p/original{self.get_json_data('poster_path')}" 
-    # @property
-    # def poster_url_w500(self): return f"https://image.tmdb.org/t/p/w500{self.get_json_data('poster_path')}"
-
-
-
-
     @property
     def poster_url_original(self): return self.ImdbUrlImage(self.get_json_data('poster_path')) 
     @property
     def poster_url_w500(self): return self.ImdbUrlImage500(self.get_json_data('poster_path')) 
-
-
-
-
     @property
     def release_date(self): return self.get_json_data('release_date')
     @property
@@ -154,15 +144,13 @@ class Programme(models.Model):
     @property
     def year_and_countries(self): return f"{self.release_year} - {self.countries}"
 
-
-    
+    @property
     def actors_name(self):
         if self.json_datas and 'actors' in self.json_datas:                       
             return ", ".join([actor['name'] for actor in self.json_datas['actors']])
         else:
             return ""
-
-
+    
     def actors_pic(self):
         if self.json_datas and 'actors' in self.json_datas:                       
             return [{'url' : self.ImdbUrlImage500(actor['profile_path']), 'name' : actor['name']  } for actor in self.json_datas['actors'] if actor.get('profile_path')]
@@ -172,16 +160,11 @@ class Programme(models.Model):
     @property
     def carousel(self):
         sources = []        
-        if self.poster_url_w500:
-            sources.append({'url' : self.poster_url_w500,  'name' : ''})
-        if self.visuel:
-            sources.append({'url' : self.visuel, 'name' : ''})
-
-        sources.extend(self.actors_pic())
-        
+        if self.poster_url_w500 != "":  sources.append({'url' : self.poster_url_w500,  'name' : ''})
+        if self.visuel:                 sources.append({'url' : self.visuel, 'name' : ''})
+        sources.extend(self.actors_pic())        
         carousel_items = [{'index': idx + 1, 'url': source['url'], 'name': source['name']} for idx, source in enumerate(sources)]
         return carousel_items
-        
 
     @property
     def videos(self):
@@ -208,6 +191,9 @@ class Import(models.Model):
     end = models.DateTimeField(verbose_name="Fin", blank=True, null=True)
     count_before = models.IntegerField (verbose_name="Count avant")
     count_after = models.IntegerField (verbose_name="Count après", blank=True, null=True)
+    deleted = models.IntegerField (verbose_name="Deleted", blank=True, null=True)
+    min_start = models.DateTimeField(verbose_name="Min Start", blank=True, null=True)
+    max_start = models.DateTimeField(verbose_name="Max Start", blank=True, null=True)
 
     class Meta:
         verbose_name = "Import"
