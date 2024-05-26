@@ -81,7 +81,7 @@ def stats(request):
 def get_dates(selected_date):    
 
     today = datetime.now().date()
-    today_plus = today  + timedelta(days=3)
+    today_plus = today  + timedelta(days=2)
     dates = Programme.objects.filter(pdate__range=[today, today_plus], start__time__gte='20:00').order_by('pdate').values_list('pdate', flat=True).distinct()
     jours_semaine = ['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim']
     formatted_dates = [
