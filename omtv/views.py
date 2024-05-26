@@ -95,11 +95,11 @@ def get_dates(selected_date):
 def programmes(request):
     print_request(request)
     
+    selected_date = datetime.now().date().strftime('%Y%m%d')
     if request.method == "GET":
-        selected_date = request.GET.get('date')
-    else:
-        selected_date = datetime.now().date().strftime('%Y%m%d')
-        
+        selected_date = request.GET.get('date', selected_date)
+    
+
     cookie = request.COOKIES.get("channels")
     channels = []
     if cookie == None: 
