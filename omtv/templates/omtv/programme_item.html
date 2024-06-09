@@ -83,7 +83,7 @@
         
         {% if programme.videos %}
             &nbsp;&nbsp;&nbsp;
-            <a href="{% url 'omtv:videos' %}?id={{item.id}}"><img height="25px" src="{% static 'omtv/images/youtube.png' %}"></a>         
+            <a href="{% url 'omtv:videos' %}?id={{item.id}}"><img height="25px" src="{% static 'omtv/images/youtube.png' %}"></a>
         {% endif %}
         
         {% if user.is_authenticated %}
@@ -92,18 +92,38 @@
         <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=0">More++</a> |
 
         <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=1&jsonoutput=1">Json</a> |
-        <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=0&jsonoutput=1">Json++</a>
+        <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=0&jsonoutput=1">Json++</a> |
+
+        <a href="{% url 'omtv:my_carousel' %}?id={{item.id}}">MY CAROUSEL</a>
 
         {% endif %}
         
+        {% if device == 'pc' %}
 
-        <p class="programme-property-actors">{{ item.actors_name }}</p>
-        <p class="programme-property-description">{{ item.description }}</p>        
-        
-        
-        {% if not visuel %} 
-            {% include './carousel.html' with id=item.id carousel=item.carousel auto_slide=False %}            
+        <div class="row">
+            <div class="col-md-4">
+                        <p class="programme-property-description">{{ item.description }}</p>
+            </div>
+            <div class="col-md-4">
+                        {% include './carousel.html' with id=item.id carousel=item.carousel auto_slide=False %}
+            </div>
+            <div class="col-md-4">
+                {% for actor in item.actors %}
+                    <p class="programme-property-actors">{{ actor.name }} ({{ actor.character }})</p>
+                {% endfor %}
+                        
+            </div>
+        </div>
+            
+        {% else %}
+            <p class="programme-property-actors">{{ item.actors_name }}</p>
+            <p class="programme-property-description">{{ item.description }}</p>        
+            {% if not visuel %} 
+                {% include './carousel.html' with id=item.id carousel=item.carousel auto_slide=False %}            
+            {% endif %}
+            
         {% endif %}
+
         
     </div>
 

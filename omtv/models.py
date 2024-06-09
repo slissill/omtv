@@ -145,6 +145,13 @@ class Programme(models.Model):
     def year_and_countries(self): return f"{self.release_year} - {self.countries}"
 
     @property
+    def actors(self):
+        if self.json_datas and 'actors' in self.json_datas:                       
+            return [{'name' : actor['name'], 'character' : actor['character']  } for actor in self.json_datas['actors']]
+        else:
+            return []
+
+    @property
     def actors_name(self):
         if self.json_datas and 'actors' in self.json_datas:                       
             return ", ".join([actor['name'] for actor in self.json_datas['actors']])

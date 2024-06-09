@@ -16,6 +16,12 @@ from django.http import JsonResponse
 from django.conf import settings
 from .queries import *
 
+###### django_user_agents #################################
+#pip install pyyaml ua-parser user-agents django-user-agents
+# MIDDLEWARE[...'django_user_agents.middleware.UserAgentMiddleware',]
+from django_user_agents.utils import get_user_agent
+############################################################
+
 #return HttpResponse("update_db_r") 
 
 
@@ -95,6 +101,7 @@ def get_dates(selected_date):
 def programmes(request):
     print_request(request)
     
+    
     selected_date = datetime.now().date().strftime('%Y%m%d')
     if request.method == "GET":
         selected_date = request.GET.get('date', selected_date)
@@ -123,9 +130,17 @@ def programmes(request):
 
     context = {"grouped_programmes": grouped_programmes,
                "dates" : get_dates(selected_date), 
-               "visuel" : visuel}
+               "visuel" : visuel, 
+               "device" : get_device(request)
+               }
     return render(request, 'omtv/programmes.html', context)
 
+def get_device(request):
+    user_agent = get_user_agent(request)
+    if user_agent.is_mobile : return "mob"
+    elif user_agent.is_tablet : return "tab"
+    else: return "pc"
+    
 
 def preferences(request):    
     print_request(request)
@@ -239,4 +254,15 @@ def debug_datas(request):
     for overlap in overlapping_programmes_data:
         html_content += json2html.convert(json=overlap) + "<br><br>"
     return render(request, 'omtv/json2html.html', {'html_content': html_content, 'title': 'Chevauchements'})
+
+def my_carousel(request):
+    if request.method == 'GET':
+        id = request.GET.get('id', '0')
+
+        programme = get_object_or_404(Programme, id=id)
+
+        context = {
+            'programme': programme, 
+            }
+        return render(request, 'omtv/my_carousel.html', context)
 

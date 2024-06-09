@@ -15,6 +15,7 @@ urlpatterns = [
     path('get_imdb_datas/', views.get_imdb_datas, name='get_imdb_datas'),
     path('videos/', views.videos, name='videos'),
     path('debug_datas', views.debug_datas, name='debug_datas'),
+    path('my_carousel/', views.my_carousel, name='my_carousel'),
     
 ]
 

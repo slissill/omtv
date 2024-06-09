@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <script
+    src="https://code.jquery.com/jquery-3.7.1.js"
+    integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+
+    <style>
+        body{
+            font-family: "Arial", sans-serif;
+            font-size: 14px;
+            color: #fff;
+            background: #333;
+        }
+
+        a{
+            color: #fff;
+            text-decoration: none;
+        }
+
+        h1{
+            text-align: center;
+        }
+        
+        .container{
+            width: 540px;
+            margin: 40px auto;
+            overflow: auto;
+        }
+
+        .slider-inner{
+            width: 500px;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+            float: left;
+            padding: 3px;
+            border: #666 solid 1px;
+        }
+
+        .slider-inner img{
+            display: none;
+            width: 500px;
+            height: 300px;
+        }
+
+        .slider-inner img.active{
+            display: inline-block;
+            width: 500px;
+            height: 300px;
+        }
+
+        .prev, .next{
+            float: left;
+            margin-top: 130px;
+            cursor: pointer;
+
+        }
+        .prev{
+            position:relative;
+            margin-right: -45px;
+            z-index: 100;
+        }
+
+        .next{
+            position:relative;
+            margin-left: -45px;
+            z-index: 100;
+        }
+
+    </style>
+
+    <script>
+        $(document).ready(function(){
+
+            $('.next').on('click', function(){
+                //console.log('clicked next');
+                var currentImg = $('.active');                
+                var nextImg = currentImg.next();
+                if (nextImg.length){
+                    currentImg.removeClass('active').css('z-index', -10);
+                    nextImg.addClass('active').css('z-index', 10);
+                }
+            });
+
+            $('.prev').on('click', function(){
+                //console.log('clicked prev');
+                var currentImg = $('.active');                
+                var prevImg = currentImg.prev();
+                if (prevImg.length){
+                    currentImg.removeClass('active').css('z-index', -10);
+                    prevImg.addClass('active').css('z-index', 10);
+                }
+            });
+
+            
+        });
+    </script>
+
+</head>
+<body>
+
+<div class="container">
+    <h1>JQSlider</h1>
+    <div class="slider-outer">
+        
+        <img src="{% static 'omtv/images/arrow_left.png' %}" class="prev" alt="Previous">
+
+        <div class="slider-inner">
+            
+            {% for item in programme.carousel %}
+                <img src="{{ item.url }}" alt="..."  {% if forloop.first %}class="active"{% endif %}>                                
+            {% endfor %}                            
+        </div>
+
+        <img src="{% static 'omtv/images/arrow_right.png' %}" class="next" alt="Next">
+
+    </div>
+</div>
+
+
+
+</body>
+</html>
