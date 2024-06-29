@@ -119,12 +119,23 @@ class Programme(models.Model):
     def imdb_url(self): return f"https://www.imdb.com/title/{self.get_json_data('imdb_id')}" 
     @property
     def homepage(self): return self.get_json_data('homepage')
+    
     @property
     def poster_path(self): return self.get_json_data('poster_path')
     @property
     def poster_url_original(self): return self.ImdbUrlImage(self.get_json_data('poster_path')) 
     @property
     def poster_url_w500(self): return self.ImdbUrlImage500(self.get_json_data('poster_path')) 
+
+
+    @property    
+    def affiche(self) :        
+        if self.get_json_data('poster_path')=="":
+            return self.visuel 
+        else:
+            return self.poster_url_w500
+
+
     @property
     def release_date(self): return self.get_json_data('release_date')
     @property

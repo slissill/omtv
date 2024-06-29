@@ -21,7 +21,7 @@
     <div class="carousel-inner">
         {% for item in carousel %}
 
-            <div class="carousel-item {% if forloop.first %}active{% endif %}">                
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
                 <img src="{{ item.url }}" class="d-block mx-auto img-thumbnail" style="height: 230px; object-fit: cover;" alt="...">
                 <div class="carousel-caption d-none d-md-block"  style="bottom: 0;">
                     <p>{{ item.name }}</p>

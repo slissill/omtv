@@ -8,7 +8,7 @@
 
 {% block page_content %}
 
-    {% include './programmes_dates.html' with dates=dates %}
+    {% include './programmes_dates.html' with dates=dates url_name='omtv:programmes' %}
 
 
     {% for tranche, programmes in grouped_programmes.items %}

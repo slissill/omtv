@@ -1,0 +1,119 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+{% block title %}{{programme.title}}{% endblock %}
+
+
+{% block script %}
+
+<style>
+
+    .title{
+        font-size:x-large;
+        font-weight:bold;        
+    }
+
+    .prop{
+        font-size:small;
+    }
+
+
+    .description{
+        font-size:medium;
+        font-weight:normal;
+        text-align: justify;
+        line-height: 1.5;
+        width: 300px;
+    }
+
+    .actor{
+        font-size:smaller;
+        font-weight:bold ;
+        color:gray;
+    }
+
+    .character{
+        font-size:smaller;
+        font-weight:normal ;
+        font-style: italic;
+        color:gray;        
+    }
+
+
+
+
+</style>
+
+{% endblock %}
+
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+
+
+{% block page_content %}
+
+<span class="title"> {{programme.title}} </span>
+
+<div style=" 
+        display: flex;        
+        justify-content: space-start;
+        gap:20px;
+        align-items: center;
+        ">
+
+    <img src="{{ programme.channel.visuel }}" style="height: 40px;"> 
+    <span class="prop">{{ programme.hdeb }} </span>    
+    <span class="prop">{{ programme.genre }}</span>    
+    <span class="prop">{{ programme.year_and_countries }}</span>
+    <span class="prop">{{ programme.duree }}</span>
+</div>
+<hR>
+
+<!-- <div class="prop">    
+    <a href="{{programme.imdb_url}}"><img class = "imdb" src="{% static 'omtv/images/TMDB.svg' %}" alt="{{programme.title}} sur IMDB" title="{{programme.title}} sur IMDB"></a>
+</div> -->
+
+<!-- {% include './carousel.html' with id=programme.id carousel=programme.carousel auto_slide=False %} -->
+
+
+
+<div style="
+            display: flex;        
+            justify-content: space-start;
+            gap:30px;
+            align-items: top;
+            flex-wrap: wrap;
+            ">
+
+    {% if device == 'pc' %}
+
+        <img class="img-thumbnail" src="{{ programme.affiche }}" style="height: 350px">
+        <p class="description">{{ programme.description }}</p>    
+        <table style="align-self: flex-start;border-collapse: collapse;" >        
+            {% for actor in programme.actors %}
+                <tr><td class="actor">{{ actor.name }}</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td class="character">{{ actor.character }}</td></tr>
+            {% endfor %}
+        </table>
+        
+        
+
+
+    {% else %}
+
+
+        {% include './carousel.html' with id=programme.id carousel=programme.carousel auto_slide=False %}        
+        <p class="character">{{ programme.actors_name }}</p>
+        <p class="description">{{ programme.description }}</p>    
+    
+    
+    {% endif %}
+
+</div>
+
+{% if device == 'pc' %}
+    {% include './carousel.html' with id=programme.id carousel=programme.carousel auto_slide=False %}        
+{% endif %}
+
+
+
+    
+{% endblock %}

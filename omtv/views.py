@@ -266,3 +266,44 @@ def my_carousel(request):
             }
         return render(request, 'omtv/my_carousel.html', context)
 
+def affiches(request):
+    print_request(request)    
+    
+    selected_date = datetime.now().date().strftime('%Y%m%d')
+    if request.method == "GET":
+        selected_date = request.GET.get('date', selected_date)
+    
+
+    cookie = request.COOKIES.get("channels")
+    channels = []
+    if cookie == None: 
+        for item in Channel.objects.all(): channels.append(item.code)
+    else:    
+        channels = json.loads(cookie)
+
+
+    progs = Programme.objects.filter(
+        pdate = datetime.strptime(selected_date, "%Y%m%d"), 
+        start__time__gte='20:00', 
+        channel__in=channels
+        ).order_by('start', 'channel__sort')
+    
+
+    context = {"programmes" : progs, 
+               "dates" : get_dates(selected_date),
+               "device" : get_device(request)               
+               }
+    return render(request, 'omtv/affiches.html', context)
+
+
+def programme_fiche(request):
+    if request.method == 'GET':
+        id = request.GET.get('id', '0')
+        
+        programme = get_object_or_404(Programme, id=id)
+
+        context = {
+            'programme': programme, 
+            "device" : get_device(request)
+            }
+        return render(request, 'omtv/programme_fiche.html', context)
