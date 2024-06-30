@@ -2,8 +2,13 @@
 {% load static %}
 {% block title %}{{programme.title}}{% endblock %}
 
+{% block head %}
+<link rel="stylesheet" type="text/css"  href="{% static 'omtv/slick/slick.css' %}"/>
+<link rel="stylesheet" type="text/css"  href="{% static 'omtv/slick/slick-theme.css' %}"/>
+{% endblock %}
 
 {% block script %}
+
 
 <style>
 
@@ -93,8 +98,8 @@
                 <tr><td class="actor">{{ actor.name }}</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td class="character">{{ actor.character }}</td></tr>
             {% endfor %}
         </table>
-        
-        
+
+
 
 
     {% else %}
@@ -110,10 +115,8 @@
 </div>
 
 {% if device == 'pc' %}
-    {% include './carousel.html' with id=programme.id carousel=programme.carousel auto_slide=False %}        
-{% endif %}
-
-
-
+    <hr>
+    {% include './slick_carousel.html' with programme=programme item_height="250" %}
+{% endif %} 
     
 {% endblock %}

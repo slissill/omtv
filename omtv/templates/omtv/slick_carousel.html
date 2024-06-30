@@ -1,0 +1,26 @@
+{% load static %}
+
+<div class="slick-carousel">
+    {% for item in programme.carousel %}
+        <div><img class="img-thumbnail" src="{{item.url}}" alt="{{item.name}}" style="height: {{item_height}}px;"></div>
+    {% endfor %}
+</div>
+
+
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="{% static 'omtv/slick/slick.min.js' %}"></script>    
+  
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.slick-carousel').slick({
+            infinite: false,
+            slidesToShow: 3,
+            slidesToScroll: 3,
+            dots: true,            
+            speed: 300,
+            centerMode: false,
+            variableWidth: true            
+        });
+    });
+</script>

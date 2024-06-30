@@ -1,3 +1,4 @@
+{% load static %}
 
 <div style="margin: 10px; position: relative;">
 
@@ -7,14 +8,26 @@
         alt="{{ programme.title }}" 
         title="{{ programme.title }}" 
         class="img-thumbnail"
-        style="width: 180px; object-fit: cover;"
+        style="width: 180px; object-fit: cover;"        
         onerror="this.style.display='none'; document.getElementById('imageErrorText_{{programme.id}}').style.display='block';"
     >
     </a>
 
+    <!-- onerror="this.style.display='none'; document.getElementById('imageErrorText_{{programme.id}}').style.display='block';" -->
+    <!-- onerror="this.onerror=null; this.src='{% static 'omtv/images/affiche_empty.jpg' %}'" -->
+
     <div id="imageErrorText_{{programme.id}}" style="display: none; text-align: center; width:180px; height: 30px; border:1px solid white;">
 
-        <a href="{% url 'omtv:programme_fiche' %}?id={{programme.id}}" style="font-size: 16px">{{ programme.title }}</a>
+        <!-- <a href="{% url 'omtv:programme_fiche' %}?id={{programme.id}}" style="font-size: 16px">{{ programme.title }}</a> -->
+        <a href="{% url 'omtv:programme_fiche' %}?id={{programme.id}}" style="font-size: 16px">
+            <img 
+            src="{% static 'omtv/images/affiche_empty.jpg' %}"
+            alt="{{ programme.title }}" 
+            title="{{ programme.title }}" 
+            class="img-thumbnail"
+            style="width: 180px; object-fit: cover;"            
+        >
+        </a>
     </div>    
 
     <div class="d-flex justify-content-between align-items-center" 
