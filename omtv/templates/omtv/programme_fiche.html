@@ -91,7 +91,8 @@
 
     {% if device == 'pc' %}
 
-        <img class="img-thumbnail" src="{{ programme.affiche }}" style="height: 350px">
+        {% include './affiche_item.html' with programme=programme  with_props=0 size="height:350px;" %}
+
         <p class="description">{{ programme.description }}</p>    
         <table style="align-self: flex-start;border-collapse: collapse;" >        
             {% for actor in programme.actors %}
@@ -116,7 +117,7 @@
 
 {% if device == 'pc' %}
     <hr>
-    {% include './slick_carousel.html' with programme=programme item_height="250" %}
+    {% include './slick_carousel.html' with carousel=programme.carousel item_height="250" %}
 {% endif %} 
     
 {% endblock %}

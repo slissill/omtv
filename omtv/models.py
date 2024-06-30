@@ -177,12 +177,18 @@ class Programme(models.Model):
 
     @property
     def carousel(self):
-        sources = []        
-        if self.poster_url_w500 != "":  sources.append({'url' : self.poster_url_w500,  'name' : ''})
+        sources = []                
         if self.visuel:                 sources.append({'url' : self.visuel, 'name' : ''})
         sources.extend(self.actors_pic())        
         carousel_items = [{'index': idx + 1, 'url': source['url'], 'name': source['name']} for idx, source in enumerate(sources)]
         return carousel_items
+
+    @property
+    def carousel_w_affiche(self):
+        sources = self.carousel        
+        if self.poster_url_w500 != "":  sources.insert(0, {'url' : self.poster_url_w500,  'name' : ''})
+        return sources
+
 
     @property
     def videos(self):

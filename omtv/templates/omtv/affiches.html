@@ -13,7 +13,7 @@
 
 <div class="d-flex flex-wrap justify-content-left">        
     {% for programme in programmes %}
-        {% include './affiche_item.html' with programme=programme %}
+        {% include './affiche_item.html' with programme=programme  with_props=1 size="width:170px;" %}
     {% endfor %}
 </div>
 

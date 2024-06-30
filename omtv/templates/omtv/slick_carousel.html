@@ -1,7 +1,7 @@
 {% load static %}
 
 <div class="slick-carousel">
-    {% for item in programme.carousel %}
+    {% for item in carousel %}
         <div><img class="img-thumbnail" src="{{item.url}}" alt="{{item.name}}" style="height: {{item_height}}px;"></div>
     {% endfor %}
 </div>
