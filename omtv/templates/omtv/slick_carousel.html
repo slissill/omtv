@@ -2,7 +2,7 @@
 
 <div class="slick-carousel">
     {% for item in carousel %}
-        <div><img class="img-thumbnail" src="{{item.url}}" alt="{{item.name}}" style="height: {{item_height}}px;"></div>
+        <div><img class="img-thumbnail" src="{{item.url}}" alt="{{item.name}}" style="{{image_size}}"></div>
     {% endfor %}
 </div>
 
@@ -12,15 +12,14 @@
 <script type="text/javascript" src="{% static 'omtv/slick/slick.min.js' %}"></script>    
   
 <script type="text/javascript">
-    $(document).ready(function(){
+ $(document).ready(function(){
         $('.slick-carousel').slick({
             infinite: false,
-            slidesToShow: 3,
-            slidesToScroll: 3,
+            slidesToShow: {{slides_to_show}}, 
+            slidesToScroll: {{slides_to_scroll}},
             dots: true,            
             speed: 300,
             centerMode: false,
-            variableWidth: true            
+            variableWidth: true
         });
-    });
-</script>
+});</script>

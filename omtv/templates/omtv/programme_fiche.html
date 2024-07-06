@@ -104,9 +104,14 @@
 
 
     {% else %}
+    
+        <!-- CAROUSEL MOBILE -->
+        <div style="width: 250px;">
+            <!-- https://stackoverflow.com/questions/41585988/slick-slider-displaying-one-image-at-a-time-not-working -->
+        {% include './slick_carousel.html' with carousel=programme.carousel_w_affiche image_size="width:200px;" slides_to_show="1" slides_to_scroll=1  %}
+        </div>
 
-
-        {% include './carousel.html' with id=programme.id carousel=programme.carousel auto_slide=False %}        
+        <!-- {% include './carousel.html' with id=programme.id carousel=programme.carousel_w_affiche auto_slide=False %}         -->
         <p class="character">{{ programme.actors_name }}</p>
         <p class="description">{{ programme.description }}</p>    
     
@@ -116,8 +121,11 @@
 </div>
 
 {% if device == 'pc' %}
-    <hr>
-    {% include './slick_carousel.html' with carousel=programme.carousel item_height="250" %}
+    <hr>    
+    <!-- CAROUSEL PC -->    
+    {% include './slick_carousel.html' with carousel=programme.carousel image_size="height:250px;" slides_to_show=3 slides_to_scroll=3  %}
+
+
 {% endif %} 
     
 {% endblock %}
