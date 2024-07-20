@@ -1,6 +1,6 @@
 {% load static %}
 
-<div style="margin: 10px; position: relative;">
+<!-- <div style="margin: 10px; position: relative;">
 
     <a href="{% url 'omtv:programme_fiche' %}?id={{programme.id}}">
         <img 
@@ -14,10 +14,77 @@
     </a>
 
     {% if with_props %}
-    <div class="d-flex justify-content-between align-items-center" 
-        style="position: absolute; bottom: 0; left: 0; right: 0; z-index: 10; background: rgba(255, 255, 255, 0.0);">
+    <div 
+        class="d-flex justify-content-between align-items-center" 
+        style="position: absolute; bottom: 0; left: 0; right: 0; z-index: 10; background: rgba(255, 255, 255, 0.0);"
+        >
+
         <img src="{{ programme.channel.visuel }}" alt="{{ programme.channel }}" title="{{ programme.channel }}" style="height: 40px; padding-left: 10px;">
+        
         <p class="affiche-hdeb mb-0" style="margin-right: 10px;">{{ programme.hdeb }}</p>
+
     </div>
     {% endif %}
+</div> -->
+
+<div style="position: relative;">
+
+    <a href="{% url 'omtv:programme_fiche' %}?id={{programme.id}}">
+        <img 
+            src="{{ programme.affiche }}"
+            class="img-thumbnail img-fluid"        
+            alt="{{ programme.title }}" 
+            title="{{ programme.title }}"
+            onerror="this.onerror=null; this.src='{% static 'omtv/images/affiche_empty.jpg' %}'"
+        >
+    </a>
+
+
+<!-- <div class="position-relative">
+    <a href="#"><img src="https://image.tmdb.org/t/p/w500/dic3GdmMpxxfkCQfvZnasb5ZkSG.jpg" class="img-fluid"></a>
+    <img src="https://via.placeholder.com/30" class="overlay-logo">
+    <div class="overlay-text">20:00</div>
+</div> -->
+
+    {% if with_props %}
+
+    <img src="{{ programme.channel.visuel }}" alt="{{ programme.channel }}" title="{{ programme.channel }}" 
+        style="
+            position: absolute;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 2px 5px;
+            border-radius: 3px;
+            height: 40px;
+            bottom: 5px;
+            left: 5px;">
+
+
+    <div 
+        style="
+            position: absolute;            
+            bottom: 10px;
+            right: 10px;
+            font-size:small;
+            font-weight: bolder;            
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.2);"> 
+        {{ programme.hdeb }}
+    </div>
+
+
+
+    <!-- <div 
+        class="d-flex justify-content-between align-items-center" 
+        style="position: absolute; top: 0; left: 0; right: 0; z-index: 10; background: rgba(255, 255, 255, 0.0);"
+        >
+
+        <img src="{{ programme.channel.visuel }}" alt="{{ programme.channel }}" title="{{ programme.channel }}" style="height: 40px; padding-left: 10px;">
+        <p style="font-size:small; font-weight: bolder; width: 40px; margin-right: 5px; margin-top: 5px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.2);">{{ programme.hdeb }}</p>
+
+    </div> -->
+
+
+    {% endif %}
+
 </div>
+

@@ -15,6 +15,7 @@ import requests
 from django.http import JsonResponse
 from django.conf import settings
 from .queries import *
+import locale
 
 ###### django_user_agents #################################
 #pip install pyyaml ua-parser user-agents django-user-agents
@@ -22,7 +23,7 @@ from .queries import *
 from django_user_agents.utils import get_user_agent
 ############################################################
 
-#return HttpResponse("update_db_r") 
+#return HttpResponse("update_db_r")
 
 
 def print_request(request):
@@ -35,15 +36,15 @@ def print_request(request):
     print ("**************************************")
 
 
-def home(request):    
+def home(request):
     return render(request, 'omtv/home.html')
 
-def import_xml_data(request):  
+def import_xml_data(request):
     maj_bdd()
     return redirect ("omtv:programmes")
 
 @login_required
-def dashboard(request): 
+def dashboard(request):
     last_imports = Import.objects.all()[:10]
     return render(request, 'omtv/dashboard.html', {'last_imports' : last_imports})
 
@@ -77,50 +78,40 @@ def stats(request):
     context = {
         'programmes_count' : programmes_count,
         'dates_count' : dates_count,
-        'max_updated_at' : max_updated_at, 
-        'div_count_by_date': div_count_by_date, 
-        'div_count_by_channel' : div_count_by_channel, 
+        'max_updated_at' : max_updated_at,
+        'div_count_by_date': div_count_by_date,
+        'div_count_by_channel' : div_count_by_channel,
         'div_count_by_genre' : div_count_by_genre,
         }
-    return render(request, 'omtv/stats.html', context)    
+    return render(request, 'omtv/stats.html', context)
 
-def get_dates(selected_date):    
+def get_dates(selected_date):
 
     today = datetime.now().date()
-    today_plus = today  + timedelta(days=2)
+    today_plus = today  + timedelta(days=4)
     dates = Programme.objects.filter(pdate__range=[today, today_plus], start__time__gte='20:00').order_by('pdate').values_list('pdate', flat=True).distinct()
     jours_semaine = ['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim']
+
+
     formatted_dates = [
-                            {'name': f"{jours_semaine[date.weekday()]} {date.day}", 
-                             'code': date.strftime('%Y%m%d'),  
-                             'selected': date.strftime('%Y%m%d') == selected_date, 
-                            } for date in dates 
-                    ]    
+                            {'name': jours_semaine[dt.weekday()],
+                             'code': dt.strftime('%Y%m%d'),
+                             'selected': dt.strftime('%Y%m%d') == selected_date,
+                            } for dt in dates
+                    ]
     return formatted_dates
 
 def programmes(request):
     print_request(request)
-    
-    
+
+
     selected_date = datetime.now().date().strftime('%Y%m%d')
     if request.method == "GET":
         selected_date = request.GET.get('date', selected_date)
-    
-
-    cookie = request.COOKIES.get("channels")
-    channels = []
-    if cookie == None: 
-        for item in Channel.objects.all(): channels.append(item.code)
-    else:    
-        channels = json.loads(cookie)
 
 
-    progs = Programme.objects.filter(
-        pdate = datetime.strptime(selected_date, "%Y%m%d"), 
-        start__time__gte='20:00', 
-        channel__in=channels
-        ).order_by('start', 'channel__sort')
-    
+    progs = get_programmes_on_date (request, datetime.strptime(selected_date, "%Y%m%d"))
+
     # Regoupemement par tranche-horaire
     grouped_programmes = {}
     for tranche, programmes_in_tranche in groupby(progs, key=lambda x: x.tranche):
@@ -129,8 +120,8 @@ def programmes(request):
     visuel = request.COOKIES.get("visuel") == "true"
 
     context = {"grouped_programmes": grouped_programmes,
-               "dates" : get_dates(selected_date), 
-               "visuel" : visuel, 
+               "dates" : get_dates(selected_date),
+               "visuel" : visuel,
                "device" : get_device(request)
                }
     return render(request, 'omtv/programmes.html', context)
@@ -140,12 +131,12 @@ def get_device(request):
     if user_agent.is_mobile : return "mob"
     elif user_agent.is_tablet : return "tab"
     else: return "pc"
-    
 
-def preferences(request):    
+
+def preferences(request):
     print_request(request)
     if request.method == "POST":
-        
+
         if 'chk_visuel' in request.POST:
              visuel = True
         else:
@@ -162,36 +153,36 @@ def preferences(request):
 
 
         return response
-        
+
     elif request.method == "GET":
 
         visuel = request.COOKIES.get("visuel") == "true"
 
-        all_channels = Channel.objects.all()        
+        all_channels = Channel.objects.all()
         channel_codes = [channel.code for channel in all_channels]
         cookie_channels = request.COOKIES.get("channels")
         if cookie_channels != None: channel_codes = json.loads(cookie_channels)
         channels = [
-                    {   'code'      : channel.code, 
-                        'name'      : channel.name,  
+                    {   'code'      : channel.code,
+                        'name'      : channel.name,
                         'checked'   : channel.code in channel_codes,
                     } for channel in all_channels
                    ]
-        context = { 
-            "visuel" : visuel, 
+        context = {
+            "visuel" : visuel,
             "channels" : channels
             }
         return render(request, 'omtv/preferences.html', context)
 
 
-def get_imdb_datas(request):    
+def get_imdb_datas(request):
     if request.method == 'GET':
         title = request.GET.get('title', 'inception')
         bln_light = request.GET.get('light', '0') != '0'
         bln_jsonoutput = request.GET.get('jsonoutput', '0') != '0'
         json_datas = {}
-        json_status = get_json_from_title(title, json_datas, light=bln_light) 
-        
+        json_status = get_json_from_title(title, json_datas, light=bln_light)
+
         if (json_status == 1):
             if bln_jsonoutput == True:
                 return JsonResponse({'movie': json_datas})
@@ -200,7 +191,7 @@ def get_imdb_datas(request):
                 html_content = json2html.convert(json = json_datas, clubbing=True, encode=False, table_attributes='border="1"')
                 html_content = html_content.replace("#DEBUT#", "<img width=300 src='https://image.tmdb.org/t/p/original")
                 html_content = html_content.replace("#FIN#", "></img>")
-                return render(request, 'omtv/json2html.html', {'html_content': html_content, 'title' : title})            
+                return render(request, 'omtv/json2html.html', {'html_content': html_content, 'title' : title})
 
     return JsonResponse({'Failed': title}, status=404)
 
@@ -225,21 +216,21 @@ def videos(request):
         id = request.GET.get('id', '0')
         crit_video_type=request.GET.get('type')
         crit_video_key=request.GET.get('key')
-        
+
         programme = get_object_or_404(Programme, id=id)
 
         if crit_video_type == None:
             videos_types = programme.videos_types
             crit_video_type = next(iter(videos_types))  # Premier type de vidéo
-            
+
         if crit_video_key == None:
             filtered_videos = [video for video in programme.videos if video['type'] == crit_video_type]
             crit_video_key = filtered_videos[0]['key'] # Premiere vidéo du type
 
         context = {
-            'programme': programme, 
-            'crit_video_type' : crit_video_type, 
-            'crit_video_key' : crit_video_key, 
+            'programme': programme,
+            'crit_video_type' : crit_video_type,
+            'crit_video_key' : crit_video_key,
             }
         return render(request, 'omtv/videos.html', context)
 
@@ -262,36 +253,22 @@ def my_carousel(request):
         programme = get_object_or_404(Programme, id=id)
 
         context = {
-            'programme': programme, 
+            'programme': programme,
             }
         return render(request, 'omtv/my_carousel.html', context)
 
 def affiches(request):
-    print_request(request)    
-    
-    selected_date = datetime.now().date().strftime('%Y%m%d')
+    print_request(request)
+
+    selected_date = datetime.now().strftime('%Y%m%d')
     if request.method == "GET":
         selected_date = request.GET.get('date', selected_date)
-    
 
-    cookie = request.COOKIES.get("channels")
-    channels = []
-    if cookie == None: 
-        for item in Channel.objects.all(): channels.append(item.code)
-    else:    
-        channels = json.loads(cookie)
+    programmes = get_programmes_on_date (request, datetime.strptime(selected_date, "%Y%m%d"))
 
-
-    progs = Programme.objects.filter(
-        pdate = datetime.strptime(selected_date, "%Y%m%d"), 
-        start__time__gte='20:00', 
-        channel__in=channels
-        ).order_by('start', 'channel__sort')
-    
-
-    context = {"programmes" : progs, 
+    context = {"programmes" : programmes,
                "dates" : get_dates(selected_date),
-               "device" : get_device(request)               
+               "device" : get_device(request)
                }
     return render(request, 'omtv/affiches.html', context)
 
@@ -299,11 +276,31 @@ def affiches(request):
 def programme_fiche(request):
     if request.method == 'GET':
         id = request.GET.get('id', '0')
-        
+
         programme = get_object_or_404(Programme, id=id)
 
+        # Obtient les programmes du meme jour
+        programmes = get_programmes_on_date(request, programme.pdate)
+
         context = {
-            'programme': programme, 
+            'programme': programme,
+            'programmes': programmes,
             "device" : get_device(request)
             }
         return render(request, 'omtv/programme_fiche.html', context)
+
+def get_programmes_on_date(request, dat):
+
+    # obtient le filtre pour les channels
+    cookie = request.COOKIES.get("channels")
+    channels = []
+    if cookie == None:
+        for item in Channel.objects.all(): channels.append(item.code)
+    else:
+        channels = json.loads(cookie)
+
+    # Filtre les programmes
+    return Programme.objects.filter(pdate = dat, start__time__gte='20:00', channel__in=channels).order_by('start', 'channel__sort')
+
+
+
