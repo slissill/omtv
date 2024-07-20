@@ -44,6 +44,31 @@
 
 </style>
 
+
+<!-- <style>
+    .row-equal {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .fixed-width {
+        flex: 0 0 200px;
+        max-width: 200px;
+        display: flex;
+        align-items: stretch;
+    }
+    .img-container {
+        flex: 1;
+        display: flex;
+        align-items: stretch;
+    }
+    .img-container img {
+        width: 100%;
+        height: auto;
+        object-fit: cover; /* Optionally, you can use this to ensure the image covers the container */
+    }
+</style> -->
+
+
 {% endblock %}
 
 <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
@@ -65,7 +90,7 @@
         gap:20px;
         align-items: center;
         ">
-    <img src="{{ programme.channel.visuel }}" style="height: 40px;"> 
+    <img src="{{ programme.channel.visuel }}" style="height: 40px; background-color: lightgray;"> 
     <span class="prop">{{ programme.hdeb }} </span>    
     <span class="prop">{{ programme.genre }}</span>    
     <span class="prop">{{ programme.year_and_countries }}</span>
@@ -75,26 +100,54 @@
 <hr>
 
 
+<!-- <div class="row row-equal">
+    <div class="col-12 col-md-auto fixed-width mb-3">
+        <div class="img-container">
+            <img 
+                src="{{ programme.affiche }}"
+                class="img-thumbnail"        
+                alt="{{ programme.title }}" 
+                title="{{ programme.title }}"
+                onerror="this.onerror=null; this.src='{% static 'omtv/images/affiche_empty.jpg' %}'"
+            >
+        </div>
+    </div>
+
+    <div class="col-12 col-md mb-3">
+        {{ programme.description }}
+    </div>
+    
+    <div class="col-12 col-md mb-3">
+        <ul>
+            {% for actor in programme.actors %}
+                <li>{{ actor.name }}</li>
+            {% endfor %}
+        </ul>        
+    </div>
+</div> -->
+
+
 <div class="row">
-    <div class="col border">
+    <div class="col-12 col-md-4 mb-3">
         
+        <!-- {% include './carousel.html' with id=programme.id carousel=programme.carousel auto_slide=False %} -->
 
         <img 
         src="{{ programme.affiche }}"
         class="img-thumbnail"        
         alt="{{ programme.title }}" 
         title="{{ programme.title }}"
-        style="height: 350px;"
+        style="width: 200px;"
         onerror="this.onerror=null; this.src='{% static 'omtv/images/affiche_empty.jpg' %}'"
     >
 
     </div>
 
-    <div class="col border">
+    <div class="col-12 col-md-4 mb-3 border">
         {{ programme.description }}
     </div>
     
-    <div class="col border">
+    <div class="col-12 col-md-4 mb-3 border">
         <ul>
             {% for actor in programme.actors %}
                 <li>{{ actor.name }}</li>
