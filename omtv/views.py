@@ -292,12 +292,24 @@ def programme_fiche(request):
 def get_programmes_on_date(request, dat):
 
     # obtient le filtre pour les channels
-    cookie = request.COOKIES.get("channels")
+
+    # cookie = request.COOKIES.get("channels")
+    # channels = []
+    # if cookie == None:
+    #     for item in Channel.objects.all(): channels.append(item.code)
+    # else:
+    #     channels = json.loads(cookie)
+
+    excluded_codes = [
+        'CanalPlus.fr',
+        'ParisPremiere.fr',
+        'CanalPlusSport.fr',
+        'CanalPlusCinema.fr',
+        'PlanetePlus.fr'
+    ]
     channels = []
-    if cookie == None:
-        for item in Channel.objects.all(): channels.append(item.code)
-    else:
-        channels = json.loads(cookie)
+    for item in Channel.objects.exclude(code__in=excluded_codes):
+        channels.append(item.code)
 
     # Filtre les programmes
     return Programme.objects.filter(pdate = dat, start__time__gte='20:00', channel__in=channels).order_by('start', 'channel__sort')

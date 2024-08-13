@@ -38,6 +38,8 @@ CD C:\ZDEPOT\omtv\
 python manage.py runserver
 
 
+http://127.0.0.1:8000/omtv/
+
 
 ************************************************************
 ******* Des modules à installer ****************************
