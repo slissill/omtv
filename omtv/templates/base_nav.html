@@ -2,38 +2,21 @@
 {% load static %}
 
 {% block content %}
-  <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-    <!-- Brand -->
-    <!-- <a class="navbar-brand" href="{% url 'omtv:programmes' %}"><i class="material-icons">tv</i></a> -->
-
-    <!-- Toggler/collapsibe Button -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <!-- Navbar links -->
-    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-      <ul class="navbar-nav">                
-        <li class="nav-item"><a class="nav-link" href="{% url 'omtv:programmes' %}"><i class="material-icons">home</i></a></li>        
-        <li class="nav-item"><a class="nav-link" href="{% url 'omtv:dashboard' %}"><i class="material-icons">settings</i></a></li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://www.imdb.com/">
-            <img width="70px" src="{% static 'omtv/images/TMDB.svg' %}" alt="IMDB" title="IMDB">
-          </a>
-        </li>
 
 
-        <!-- {% if user.is_authenticated %}
-          <li class="nav-item">Connecté sous {{ user.username }}</li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'accounts:logout' %}">Déconnexion</a></li>
-        {% else %}          
-          <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">Connexion</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'accounts:register' %}">Inscription</a></li>
-        {% endif %} -->
+<nav class="navbar navbar-expand-sm bg-dark  navbar-dark" >
+  <div class="container-fluid">
+    <ul class="navbar-nav d-flex flex-row">
 
-      </ul>
-    </div>
-  </nav>    <!-- Include content from the child templates -->
+      <li class="nav-item"><a class="nav-link me-5" href="{% url 'omtv:programmes' %}"><i class="material-icons">home</i></a></li>        
+      <li class="nav-item"><a class="nav-link me-5" href="{% url 'omtv:dashboard' %}"><i class="material-icons">settings</i></a></li>
+      <li class="nav-item"> <a class="nav-link me-5" href="https://www.imdb.com/"> <img width="70px" src="{% static 'omtv/images/TMDB.svg' %}" alt="IMDB" title="IMDB">
+        </a>
+      </li>
+
+    </ul>
+  </div>
+</nav>
 
   {% block page_content %}
   {% endblock %}
