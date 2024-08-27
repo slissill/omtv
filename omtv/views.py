@@ -101,7 +101,7 @@ def get_dates(selected_date):
                     ]
     return formatted_dates
 
-def programmes(request):
+def old_programmes(request):
     print_request(request)
 
 
@@ -124,7 +124,7 @@ def programmes(request):
                "visuel" : visuel,
                "device" : get_device(request)
                }
-    return render(request, 'omtv/programmes.html', context)
+    return render(request, 'omtv/old_programmes.html', context)
 
 def get_device(request):
     user_agent = get_user_agent(request)
@@ -257,7 +257,7 @@ def my_carousel(request):
             }
         return render(request, 'omtv/my_carousel.html', context)
 
-def affiches(request):
+def programmes(request):
     print_request(request)
 
     selected_date = datetime.now().strftime('%Y%m%d')
@@ -270,7 +270,7 @@ def affiches(request):
                "dates" : get_dates(selected_date),
                "device" : get_device(request)
                }
-    return render(request, 'omtv/affiches.html', context)
+    return render(request, 'omtv/programmes.html', context)
 
 
 def programme_fiche(request):

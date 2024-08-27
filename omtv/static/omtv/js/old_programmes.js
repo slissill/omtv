@@ -1,15 +1,6 @@
-function scrollToBottom(itemId) {
-    // Récupérer l'élément qui a été déplié
-    var targetElement = document.getElementById("programme-" + itemId);        
-    // Vérifier si l'élément est visible
-    if (targetElement) {
-    // Utiliser setTimeout pour s'assurer que l'élément est visible après son déploiement
-    setTimeout(function() {
-        // Faire défiler la fenêtre jusqu'au bas de l'élément déplié
-        targetElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }, 300); // ajustez la durée en millisecondes en fonction de la vitesse de déploiement de votre accordéon
-    }
-}
+
+
+
 
 function getCollapsedDivs(isCollapsed) {
     var collapseElements = document.querySelectorAll("div[my_type='collapsable']");

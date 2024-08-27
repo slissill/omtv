@@ -1,0 +1,28 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+{% block title %}Films{% endblock %}
+
+{% block script %}       
+    <script src="{% static 'omtv/js/old_programmes.js' %}"></script>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include './programmes_dates.html' with dates=dates url_name='omtv:old_programmes'  %}
+
+    <button type="button" class="btn btn-primary d-flex align-items-center justify-content-center" style="height: 40px; width: 40px;" onclick="toggle_divs()">
+        <span class="material-symbols-outlined" style="font-size: 24px;">unfold_more</span>
+    </button>
+
+    {% for tranche, programmes in grouped_programmes.items %}
+        
+        <center><label class="tranche">{{ tranche }}</label></center>
+
+        {% for programme in programmes %}
+            {% include './old_programme_item.html' with item=programme visuel=visuel %}
+        {% endfor %}
+    {% endfor %}
+
+
+    
+{% endblock %}

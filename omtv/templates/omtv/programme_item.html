@@ -1,131 +1,90 @@
 {% load static %}
 
-<!-- https://www.w3schools.com/bootstrap/bootstrap_grid_system.asp -->
+<!-- <div style="margin: 10px; position: relative;">
 
-
-
-<div class="container">
-    <button type="button" 
-        class="btn btn-info" 
-        data-bs-toggle="collapse" 
-        data-bs-target="#programme-{{ item.id }}" 
-        style="width: 100%; margin:3px; white-space: normal;"
-        onclick="scrollToBottom('{{ item.id }}')"
+    <a href="{% url 'omtv:programme_fiche' %}?id={{programme.id}}">
+        <img 
+            src="{{ programme.affiche }}"
+            alt="{{ programme.title }}" 
+            title="{{ programme.title }}" 
+            class="img-thumbnail"  
+            style="{{ size }}object-fit: cover;"
+            onerror="this.onerror=null; this.src='{% static 'omtv/images/affiche_empty.jpg' %}'"
         >
+    </a>
+
+    {% if with_props %}
+    <div 
+        class="d-flex justify-content-between align-items-center" 
+        style="position: absolute; bottom: 0; left: 0; right: 0; z-index: 10; background: rgba(255, 255, 255, 0.0);"
+        >
+
+        <img src="{{ programme.channel.visuel }}" alt="{{ programme.channel }}" title="{{ programme.channel }}" style="height: 40px; padding-left: 10px;">
         
-        <div class="row">
+        <p class="affiche-hdeb mb-0" style="margin-right: 10px;">{{ programme.hdeb }}</p>
 
-            <div class="col-sm-12" >
-
-                <style>
-                    table {
-                        width: 100%; /* La table prend 100% de la largeur disponible */
-                        border-collapse: collapse; /* Fusionner les bordures de cellules */
-                    }
-                
-                    th, td {
-                        border: 0px solid black; /* Bordures pour les cellules */
-                        padding: 2px; /* Espacement interne */
-                        text-align: center; /* Centrer le contenu */
-                        vertical-align: middle;
-                    }
-                </style>
-
-
-
-                <table style="width: 100%;">
-                    <colgroup>
-                        <col style="width: 30px;">  <!-- Première colonne avec une largeur fixe de 100px -->
-                        <col>                       <!-- Deuxième colonne s'ajustera automatiquement -->
-                        <col style="width: 80px;">  <!-- Troisième colonne avec une largeur fixe de 200px -->
-                    </colgroup>
-
-
-                    <tr>
-                        <td>
-                            <img 
-                            src="{{ item.channel.visuel }}"
-                            alt="{{ item.channel }}" 
-                            title="{{ item.channel }}" 
-                            style="border: 0px solid black; height: 40px;">                            
-                        </td>
-
-                        <td>                            
-                            <span class="programme-title">{{ item.title }}</span>
-                        </td>
-
-                        <td>
-                            <p class="programme-property-strong">{{ item.genre }}</p>
-                            <p class="programme-property-strong">{{ item.hdeb_and_duree }}</p>
-                            <p class="programme-property-strong">{{ item.year_and_countries }}</p>
-                        </td>
-
-                    </tr>
-        
-                </table>
-                
-                
-            </div>
-
-        </div>
-
-    </button>
-
-    {% if visuel %} 
-        <div class="mt-1"></div> <!-- Ajoute un espace  -->
-        {% include './carousel.html' with id=item.id carousel=item.carousel auto_slide=False %}
-        <div class="mt-2"></div> <!-- Ajoute un espace  -->
+    </div>
     {% endif %}
+</div> -->
 
-    <div id="programme-{{ item.id }}" class="collapse" my_type="collapsable" style="padding: 10px;">
-        <a href="{{item.imdb_url}}"><img width="80px" src="{% static 'omtv/images/TMDB.svg' %}" alt="{{item.title}} sur IMDB" title="{{item.title}} sur IMDB"></a>
-        
-        
-        {% if programme.videos %}
-            &nbsp;&nbsp;&nbsp;
-            <a href="{% url 'omtv:videos' %}?id={{item.id}}"><img height="25px" src="{% static 'omtv/images/youtube.png' %}"></a>
-        {% endif %}
-        
-        {% if user.is_authenticated %}
-        &nbsp;
-        <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=1">More</a> | 
-        <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=0">More++</a> |
+<div style="position: relative;">
 
-        <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=1&jsonoutput=1">Json</a> |
-        <a href="{% url 'omtv:get_imdb_datas' %}?title={{item.title}}&light=0&jsonoutput=1">Json++</a> |
+    <a href="{% url 'omtv:programme_fiche' %}?id={{programme.id}}">
+        <img 
+            src="{{ programme.affiche }}"
+            class="img-thumbnail img-fluid"        
+            alt="{{ programme.title }}" 
+            title="{{ programme.title }}"
+            onerror="this.onerror=null; this.src='{% static 'omtv/images/affiche_empty.jpg' %}'"
+        >
+    </a>
 
-        <a href="{% url 'omtv:my_carousel' %}?id={{item.id}}">MY CAROUSEL</a>
 
-        {% endif %}
-        
-        {% if device == 'pc' %}
+<!-- <div class="position-relative">
+    <a href="#"><img src="https://image.tmdb.org/t/p/w500/dic3GdmMpxxfkCQfvZnasb5ZkSG.jpg" class="img-fluid"></a>
+    <img src="https://via.placeholder.com/30" class="overlay-logo">
+    <div class="overlay-text">20:00</div>
+</div> -->
 
-        <div class="row">
-            <div class="col-md-4">
-                        <p class="programme-property-description">{{ item.description }}</p>
-            </div>
-            <div class="col-md-4">
-                        {% include './carousel.html' with id=item.id carousel=item.carousel auto_slide=False %}
-            </div>
-            <div class="col-md-4">
-                {% for actor in item.actors %}
-                    <p class="programme-property-actors">{{ actor.name }} ({{ actor.character }})</p>
-                {% endfor %}
-                        
-            </div>
-        </div>
-            
-        {% else %}
-            <p class="programme-property-actors">{{ item.actors_name }}</p>
-            <p class="programme-property-description">{{ item.description }}</p>        
-            {% if not visuel %} 
-                {% include './carousel.html' with id=item.id carousel=item.carousel auto_slide=False %}            
-            {% endif %}
-            
-        {% endif %}
+    {% if with_props %}
 
-        
+    <img src="{{ programme.channel.visuel }}" alt="{{ programme.channel }}" title="{{ programme.channel }}" 
+        style="
+            position: absolute;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 2px 5px;
+            border-radius: 3px;
+            height: 40px;
+            bottom: 5px;
+            left: 5px;">
+
+
+    <div 
+        style="
+            position: absolute;            
+            bottom: 10px;
+            right: 10px;
+            font-size:small;
+            font-weight: bolder;            
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.2);"> 
+        {{ programme.hdeb }}
     </div>
 
 
+
+    <!-- <div 
+        class="d-flex justify-content-between align-items-center" 
+        style="position: absolute; top: 0; left: 0; right: 0; z-index: 10; background: rgba(255, 255, 255, 0.0);"
+        >
+
+        <img src="{{ programme.channel.visuel }}" alt="{{ programme.channel }}" title="{{ programme.channel }}" style="height: 40px; padding-left: 10px;">
+        <p style="font-size:small; font-weight: bolder; width: 40px; margin-right: 5px; margin-top: 5px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.2);">{{ programme.hdeb }}</p>
+
+    </div> -->
+
+
+    {% endif %}
+
 </div>
+

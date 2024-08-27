@@ -14,11 +14,8 @@
     <!-- Navbar links -->
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
       <ul class="navbar-nav">                
-        <li class="nav-item"><a class="nav-link" href="{% url 'omtv:programmes' %}">Films</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'omtv:affiches' %}">Affiches</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'omtv:preferences' %}">Preferences</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'omtv:programmes' %}"><i class="material-icons">home</i></a></li>        
         <li class="nav-item"><a class="nav-link" href="{% url 'omtv:dashboard' %}"><i class="material-icons">settings</i></a></li>
-
         <li class="nav-item">
           <a class="nav-link" href="https://www.imdb.com/">
             <img width="70px" src="{% static 'omtv/images/TMDB.svg' %}" alt="IMDB" title="IMDB">
@@ -38,5 +35,7 @@
     </div>
   </nav>    <!-- Include content from the child templates -->
 
-    {% block page_content %}{% endblock %}
+  {% block page_content %}
+  {% endblock %}
+
 {% endblock %}

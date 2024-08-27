@@ -7,7 +7,7 @@ app_name = "omtv"
 urlpatterns = [
     path('', views.programmes, name='home'),
     path('home', views.home, name='home'),
-    path('programmes', views.programmes, name='programmes'),    
+    path('old_programmes', views.old_programmes, name='old_programmes'),    
     path('preferences', views.preferences, name='preferences'),
     path('import_xml_data', views.import_xml_data, name='import_xml_data'),
     path('dashboard', views.dashboard, name='dashboard'),
@@ -16,7 +16,7 @@ urlpatterns = [
     path('videos/', views.videos, name='videos'),    
     path('debug_datas', views.debug_datas, name='debug_datas'),
     path('my_carousel/', views.my_carousel, name='my_carousel'),
-    path('affiches/', views.affiches, name='affiches'),
+    path('programmes/', views.programmes, name='programmes'),
     path('programme_fiche/', views.programme_fiche, name='programme_fiche'),
     
 ]

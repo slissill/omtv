@@ -1,24 +1,26 @@
 {% extends 'base_nav.html' %}
 {% load static %}
-{% block title %}Films{% endblock %}
-
-{% block script %}       
-    <script src="{% static 'omtv/js/programmes.js' %}"></script>
-{% endblock %}
+{% block title %}Programmes{% endblock %}
 
 {% block page_content %}
 
-    {% include './programmes_dates.html' with dates=dates url_name='omtv:programmes' %}
 
 
-    {% for tranche, programmes in grouped_programmes.items %}
-        
-        <center><label class="tranche">{{ tranche }}</label></center>
+{% include './programmes_dates.html' with dates=dates url_name='omtv:programmes' %}
 
-        {% for programme in programmes %}
-            {% include './programme_item.html' with item=programme visuel=visuel %}
-        {% endfor %}
+
+
+
+<div class="container">
+    <div class="row justify-content-start">
+    {% for programme in programmes %}
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            {% include './programme_item.html' with programme=programme  with_props=1 size="width:170px;" %}
+        </div>
     {% endfor %}
+
+    </div>
+</div>
 
 
     
