@@ -49,9 +49,12 @@ Attention il faut les installer dans la VM active
 pip install mysqlclient
 pip install requests
 
-Obtenir les dépendances
+************************************************************
+LIBRARIES (dépendances)
+************************************************************
 pip freeze > requirements.txt
 
+pip install -r requirements.txt
 
 #************************************************************
 #******* MIGRATION DB   *************************************
