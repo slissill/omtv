@@ -45,30 +45,6 @@
 </style>
 
 
-<!-- <style>
-    .row-equal {
-        display: flex;
-        flex-wrap: wrap;
-    }
-    .fixed-width {
-        flex: 0 0 200px;
-        max-width: 200px;
-        display: flex;
-        align-items: stretch;
-    }
-    .img-container {
-        flex: 1;
-        display: flex;
-        align-items: stretch;
-    }
-    .img-container img {
-        width: 100%;
-        height: auto;
-        object-fit: cover; /* Optionally, you can use this to ensure the image covers the container */
-    }
-</style> -->
-
-
 {% endblock %}
 
 <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
@@ -76,12 +52,7 @@
 
 
 {% block page_content %}
-{% for p in programmes %}
-<a href="{% url 'omtv:programme_fiche' %}?id={{p.id}}" >{{p.id}}</a> | 
-{% endfor %}
 
-
-<hr>
 <span class="title"> {{programme.title}} </span>
 
 <div style=" 

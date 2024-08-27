@@ -281,10 +281,26 @@ def programme_fiche(request):
 
         # Obtient les programmes du meme jour
         programmes = get_programmes_on_date(request, programme.pdate)
+        programme_ids = list(programmes.values_list('id', flat=True))
+        try:
+            current_index = programme_ids.index(int(id))
+        except ValueError:
+            current_index = None
+
+        id_prev = programme_ids[-1]
+        id_next = programme_ids[0]
+        if current_index is not None:
+            if current_index > 0: 
+                id_prev = programme_ids[current_index - 1]
+            if current_index < len(programme_ids) - 1: 
+                id_next = programme_ids[current_index + 1]
+
 
         context = {
             'programme': programme,
             'programmes': programmes,
+            'id_prev' : id_prev, 
+            'id_next' : id_next, 
             "device" : get_device(request)
             }
         return render(request, 'omtv/programme_fiche.html', context)
