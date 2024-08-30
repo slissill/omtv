@@ -22,17 +22,19 @@
     }
 
     .description{
-        font-size:medium;
+        font-size:small;
         font-weight:normal;
         text-align: justify;
-        line-height: 1.5;
-        width: 300px;
+        line-height: 1.7;        
     }
 
     .actor{
         font-size:smaller;
-        font-weight:bold ;
+        font-weight:normal ;
         color:gray;
+        list-style-type: none; /* Retire les puces */
+        padding: 0; /* Retire le padding par défaut */
+        margin: 0; /* Retire la marge par défaut */        
     }
 
     .character{
@@ -41,6 +43,7 @@
         font-style: italic;
         color:gray;        
     }
+
 
 </style>
 
@@ -58,10 +61,10 @@
 <div style=" 
         display: flex;        
         justify-content: space-start;
-        gap:20px;
+        gap:12px;
         align-items: center;
         ">
-    <img src="{{ programme.channel.visuel }}" style="height: 40px; background-color: lightgray;"> 
+    <img src="{{ programme.channel.visuel }}" style="height: 40px; background-color: rgb(82, 82, 82);"> 
     <span class="prop">{{ programme.hdeb }} </span>    
     <span class="prop">{{ programme.genre }}</span>    
     <span class="prop">{{ programme.year_and_countries }}</span>
@@ -70,72 +73,70 @@
 
 <hr>
 
+<div class="row">
 
-<!-- <div class="row row-equal">
-    <div class="col-12 col-md-auto fixed-width mb-3">
-        <div class="img-container">
-            <img 
-                src="{{ programme.affiche }}"
-                class="img-thumbnail"        
-                alt="{{ programme.title }}" 
-                title="{{ programme.title }}"
-                onerror="this.onerror=null; this.src='{% static 'omtv/images/affiche_empty.jpg' %}'"
-            >
+    <div class="col-sm-auto mb-3">
+        
+        <div class="d-flex align-items-start">
+            <a href="{{programme.imdb_url}}">
+            <img style="height: 240px;" src="{{ programme.affiche }}" class="img-thumbnail" alt="{{ programme.title }}" title="{{ programme.title }}" onerror='this.onerror=null; this.src="{% static 'omtv/images/affiche_empty.jpg' %}";'>
+            </a>
+            <ul class="ms-3 actor">
+                {% for actor in programme.actors %}
+                    <li style="margin-bottom: 3px;">{{ actor.name }}</li>
+                {% endfor %}
+            </ul>        
+    
         </div>
     </div>
 
-    <div class="col-12 col-md mb-3">
+
+    <div class="col-sm-auto mb-3">
+        <img style="max-height: 240px;" src="{{ programme.visuel }}" class="img-thumbnail" alt="{{ programme.title }}" title="{{ programme.title }}">
+    </div>
+
+    <div class="col-sm mb-3 description">
         {{ programme.description }}
     </div>
-    
-    <div class="col-12 col-md mb-3">
-        <ul>
-            {% for actor in programme.actors %}
-                <li>{{ actor.name }}</li>
-            {% endfor %}
-        </ul>        
-    </div>
-</div> -->
 
-
-<div class="row">
-    <div class="col-12 col-md-4 mb-3">
-        
-        <!-- {% include './carousel.html' with id=programme.id carousel=programme.carousel auto_slide=False %} -->
-
-        <img 
-        src="{{ programme.affiche }}"
-        class="img-thumbnail"        
-        alt="{{ programme.title }}" 
-        title="{{ programme.title }}"
-        style="width: 200px;"
-        onerror="this.onerror=null; this.src='{% static 'omtv/images/affiche_empty.jpg' %}'"
-    >
-
-    </div>
-
-    <div class="col-12 col-md-4 mb-3 border">
-        {{ programme.description }}
-    </div>
-    
-    <div class="col-12 col-md-4 mb-3 border">
-        <ul>
-            {% for actor in programme.actors %}
-                <li>{{ actor.name }}</li>
-            {% endfor %}
-        </ul>        
-    </div>
 
 </div>
 
 
+<div style=" 
+        display: flex;        
+        justify-content: space-start;
+        gap:12px;
+        flex-wrap: wrap;
+        ">
+    {% for item in programme.actors_pic %}
+        <!-- <img src="{{ item.url }}" class="img-thumbnail" style="height: 230px"> -->
+
+        <div style="position: relative;">
+            <a href="{{item.wikipedia_url}}" title="{{item.name}}">
+                <img src="{{ item.url }}" style="height: 230px; border: 1px solid rgb(136, 136, 136); border-radius: 5px;">                
+            </a>
+            <div style="position: absolute; 
+                        bottom: 0; 
+                        left: 50%; 
+                        transform: translateX(-50%); 
+                        text-align: center; 
+                        font-size: small; 
+                        font-weight: normal; 
+                        text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.2);">
+                <p style="margin: 0;">{{ item.name }}</p>
+            </div>                
+        </div>
+
+    {% endfor %}    
+
+</div>
 
 
-<hr>    
-<!-- CAROUSEL PC -->    
-{% include './slick_carousel.html' with carousel=programme.carousel image_size="height:250px;" slides_to_show=3 slides_to_scroll=3  %}
+<hr>
 
+<!-- <iframe class="embed-responsive-item" src="{{ programme.default_video }}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
 
-
+<br>
     
 {% endblock %}

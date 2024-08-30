@@ -169,11 +169,23 @@ class Programme(models.Model):
         else:
             return ""
     
+    
+    def generate_wikipedia_url(self, actor_name):
+        base_url = "https://fr.wikipedia.org/wiki/"
+        formatted_name = actor_name.replace(" ", "_")
+        return base_url + formatted_name
+
+    
     def actors_pic(self):
         if self.json_datas and 'actors' in self.json_datas:                       
-            return [{'url' : self.ImdbUrlImage500(actor['profile_path']), 'name' : actor['name']  } for actor in self.json_datas['actors'] if actor.get('profile_path')]
+            return [{
+                    'url' : self.ImdbUrlImage500(actor['profile_path']), 
+                    'name' : actor['name'], 
+                    'wikipedia_url' : self.generate_wikipedia_url(actor['name'])
+                    } for actor in self.json_datas['actors'] if actor.get('profile_path')]
         else:
             return []
+
 
     @property
     def carousel(self):
@@ -205,6 +217,11 @@ class Programme(models.Model):
 
         video_types = [video['type'] for video in self.json_datas['videos']]
         return dict(Counter(video_types))
+    
+    @property
+    def default_video(self):
+        key = "QFa7ptO3CGs"
+        return f"https://www.youtube.com/embed/{key}"
 
 #******************************************************
 # Class Import

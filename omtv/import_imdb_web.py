@@ -71,6 +71,7 @@ def get_imdb_movie_actors(id, light):
         json_light = []
         for item in json_brut.get('cast', [])[:10]:
             json_light.append({
+                'id': item['id'],
                 'name': item['name'],
                 'character': item['character'],
                 'profile_path': item['profile_path']
