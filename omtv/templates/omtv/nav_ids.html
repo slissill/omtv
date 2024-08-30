@@ -1,0 +1,5 @@
+{% load static %}
+
+<li class="nav-item"><a class="nav-link me-3" href="{% url 'omtv:programme_fiche' %}?id={{id_prev}}"><i class="material-icons" style="transform: rotate(180deg);">play_arrow</i></a></li>
+<li class="nav-item"><a class="nav-link me-3" href="{% url 'omtv:programme_fiche' %}?id={{id_next}}">{{id_pos}}</a></li>
+<li class="nav-item"><a class="nav-link me-3" href="{% url 'omtv:programme_fiche' %}?id={{id_next}}"><i class="material-icons">play_arrow</i></a></li>

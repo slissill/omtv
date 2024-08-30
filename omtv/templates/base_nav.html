@@ -13,9 +13,10 @@
       <li class="nav-item"> <a class="nav-link me-3" href="https://www.imdb.com/"> <img width="70px" src="{% static 'omtv/images/TMDB.svg' %}" alt="IMDB" title="IMDB"></a></li>
 
       {% if id_prev or id_next %}
-      <li class="nav-item"><a class="nav-link me-3" href="{% url 'omtv:programme_fiche' %}?id={{id_prev}}"><i class="material-icons">arrow_left</i></a></li>
-      <li class="nav-item"><a class="nav-link me-3" href="{% url 'omtv:programme_fiche' %}?id={{id_next}}"><i class="material-icons">arrow_right</i></a></li>      
+        {% include 'omtv/nav_ids.html' %}
       {% endif %}
+
+      
 
     </ul>
   </div>
