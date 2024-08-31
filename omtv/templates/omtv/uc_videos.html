@@ -1,0 +1,97 @@
+{% load static %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<div id="types-buttons" class="container mt-3">
+</div>    
+
+<div id="navigate_videos" >
+    <ul class="navbar-nav d-flex flex-row">
+        <li class="nav-item"><a class="nav-link me-3" href="javascript:void(0)" onclick="navigate_videos(-1)"><i class="material-icons" style="transform: rotate(180deg);">play_arrow</i></a></li>
+        <li class="nav-item"><a id="position" class="nav-link me-3" href="javascript:void(0)" onclick="navigate_videos(1)"></a></li>
+        <li class="nav-item"><a class="nav-link me-3" href="javascript:void(0)" onclick="navigate_videos(1)"><i class="material-icons">play_arrow</i></a></li>
+    </ul>
+</div>
+
+<p id="video_title"></p>
+
+<iframe id="google_video"
+    class="embed-responsive-item img-thumbnail"  
+    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+    allowfullscreen style="width: 100%; height: auto; aspect-ratio: 16/9; border: none;">
+</iframe>
+
+
+<!--XXXXXXXXXXXXXXXXXXXXXXX  JAVASCRIPT XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
+<script type="text/javascript">
+    
+    const videos_json = JSON.parse('{{ videos_json|escapejs }}');    
+    console.log(videos_json);    
+    let activeType = Object.keys(videos_json)[0];
+    let videos_count = videos_json[activeType].length;
+    let num_video = 1;
+    populateTypes();
+    navigate_videos(0);
+
+    //*************************************
+    // TYPES
+    //*************************************
+    function populateTypes() {
+        const container = $('#types-buttons');
+        container.empty();
+
+        for (const type in videos_json) {
+
+            const typeButton = $('<button>').attr('type', 'button').addClass('btn btn-primary m-1').text(type).attr('data-type', type);
+            if (type === activeType) {typeButton.addClass('active');}
+            const badge = $('<span>').addClass('badge bg-secondary ms-1').text(videos_json[type].length);
+            typeButton.append(badge);
+
+            typeButton.on('click', function() {
+                    activeType = type;
+                    videos_count = videos_json[activeType].length;
+                    num_video = 1;
+                    populateTypes();
+                    navigate_videos(0);
+                });
+
+            container.append(typeButton);
+        }
+    }
+
+    //*************************************
+    // NAVIGATE VIDEO
+    //*************************************
+    function navigate_videos(direction) {
+        
+        num_video = num_video + direction;
+        if (num_video == 0) num_video = videos_count;
+        else if (num_video == videos_count + 1) num_video = 1;
+        
+        $('#position').text(num_video + " / " + videos_count);
+        $('#video_title').text(videos_json[activeType][num_video-1].name);
+        $('#google_video').attr('src', videos_json[activeType][num_video-1].src);
+
+        hide_show();
+    }
+
+    //*************************************
+    // HIDE / SHOW
+    //*************************************
+    function hide_show() {
+
+        // Si il n'y a qu'un seule type, on hide la div des types
+        if (Object.keys(videos_json).length == 1)        
+            $('#types-buttons').hide();
+        else    
+            $('#types-buttons').show();
+
+        // Si le type n'a qu'une seule video, on hide la navigation
+        if (videos_count == 1)
+            $('#navigate_videos').hide();
+        else    
+            $('#navigate_videos').show();
+    }
+
+    
+</script>

@@ -223,7 +223,7 @@ class Programme(models.Model):
         lst_videos.sort(key=lambda video: custom_order.get(video['type'], float('inf')))
 
         return lst_videos
-    
+
     @property
     def videos_types(self):
         video_types = [video['type'] for video in self.videos]
@@ -232,6 +232,45 @@ class Programme(models.Model):
     @property
     def default_video(self):
         return f"https://www.youtube.com/embed/{self.videos[0]['key']}"
+
+
+    @property
+    def dic_videos(self):
+        
+        custom_order = {
+                'Trailer': 1,
+                'Teaser': 2,
+                'Clip': 3,
+                'Featurette': 4,
+                'Behind the Scenes': 5
+            }
+
+        # Initialisation d'un dictionnaire pour stocker les vidéos par type
+        videos_by_type = {}
+
+        # Récupération et transformation des vidéos
+        for video in self.json_datas.get('videos', []):
+            video_type = video['type']
+            video_info = {
+                'key': video['key'],
+                'name': video['name'],
+                'src' : f"https://www.youtube.com/embed/{video['key']}"
+            }
+            
+            # Ajout de la vidéo dans la liste correspondante dans le dictionnaire
+            if video_type not in videos_by_type:
+                videos_by_type[video_type] = []
+            
+            videos_by_type[video_type].append(video_info)
+
+        # Tri des clés du dictionnaire selon l'ordre personnalisé
+        sorted_videos = {
+            k: videos_by_type[k]
+            for k in sorted(videos_by_type.keys(), key=lambda k: custom_order.get(k, float('inf')))
+        }
+
+        return sorted_videos
+
 
 #******************************************************
 # Class Import

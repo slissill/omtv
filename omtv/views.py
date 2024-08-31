@@ -299,14 +299,9 @@ def get_programmes_on_date(request, dat):
 
 def programme_fiche(request):
     print_request(request)
-    if request.method == 'POST':
-        id = request.POST.get('programme_id')
-        video_type = request.POST.get('video_type')        
 
-    elif request.method == 'GET':
+    if request.method == 'GET':
         id = request.GET.get('id', '0')
-        video_type = ""
-
 
     programme = get_object_or_404(Programme, id=id)
 
@@ -327,38 +322,12 @@ def programme_fiche(request):
         if current_index < len(programme_ids) - 1: 
             id_next = programme_ids[current_index + 1]                
 
-
-    videos = [
-            {'key': '001', 'name': 'Trailer 1', 'type': 'Trailer'},
-            {'key': '002', 'name': 'Teaser 1', 'type': 'Teaser'},
-            {'key': '003', 'name': 'Clip 1', 'type': 'Clip'},
-        ]
-
-
     context = {
         'programme': programme,
         'programmes': programmes,
         'id_pos' : id_pos, 
         'id_prev' : id_prev, 
         'id_next' : id_next,
-        'crit_video_type': video_type, 
-        'videos': videos,
+        'videos_json' : json.dumps(programme.dic_videos)
         }
     return render(request, 'omtv/programme_fiche.html', context)
-
-
-def videos_view(request):
-    print_request(request)
-    print("xxxxxxxxxxx videos_view")
-
-    if request.method == 'POST':
-        print("zzzzzzzzzzzz videos_view")
-        # video_type = request.POST.get('video_type')
-        # programme_id = request.POST.get('programme_id')
-        return JsonResponse({
-            'success': True,
-            'res' : "video_type"
-        })
-
-    # Handle non-AJAX requests if necessary
-    #return render(request, 'omtv/home.html')
