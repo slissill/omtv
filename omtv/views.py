@@ -298,6 +298,7 @@ def get_programmes_on_date(request, dat):
     return Programme.objects.filter(pdate = dat, start__time__gte='20:00', channel__in=channels).order_by('start', 'channel__sort')
 
 def programme_fiche(request):
+    print_request(request)
     if request.method == 'POST':
         id = request.POST.get('programme_id')
         video_type = request.POST.get('video_type')        
@@ -327,6 +328,12 @@ def programme_fiche(request):
             id_next = programme_ids[current_index + 1]                
 
 
+    videos = [
+            {'key': '001', 'name': 'Trailer 1', 'type': 'Trailer'},
+            {'key': '002', 'name': 'Teaser 1', 'type': 'Teaser'},
+            {'key': '003', 'name': 'Clip 1', 'type': 'Clip'},
+        ]
+
 
     context = {
         'programme': programme,
@@ -334,8 +341,24 @@ def programme_fiche(request):
         'id_pos' : id_pos, 
         'id_prev' : id_prev, 
         'id_next' : id_next,
-        'crit_video_type': video_type
+        'crit_video_type': video_type, 
+        'videos': videos,
         }
     return render(request, 'omtv/programme_fiche.html', context)
 
 
+def videos_view(request):
+    print_request(request)
+    print("xxxxxxxxxxx videos_view")
+
+    if request.method == 'POST':
+        print("zzzzzzzzzzzz videos_view")
+        # video_type = request.POST.get('video_type')
+        # programme_id = request.POST.get('programme_id')
+        return JsonResponse({
+            'success': True,
+            'res' : "video_type"
+        })
+
+    # Handle non-AJAX requests if necessary
+    #return render(request, 'omtv/home.html')
