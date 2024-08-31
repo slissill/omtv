@@ -150,8 +150,46 @@ flex-wrap: wrap;
 
 <HR>
 
-    <!-- <iframe class="embed-responsive-item" src="{{ programme.default_video }}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width: 100%; height: auto; aspect-ratio: 16/9; border: none;"></iframe> -->
+{% if programme.videos %}    
+    <a href="{% url 'omtv:videos' %}?id={{programme.id}}"><img height="25px" src="{% static 'omtv/images/youtube.png' %}"></a>
 
+
+
+    <!-- <div class="container mt-3">        
+        {% for video_type, count in programme.videos_types.items %}
+
+            <a href="{% url 'omtv:videos' %}?id={{ programme.id }}&type={{ video_type }}" 
+                class="btn btn-primary {% if crit_video_type == video_type %}active{% endif %}"
+                style="margin-bottom: 5px;">
+                {{ video_type }} <span class="badge bg-secondary">{{ count }}</span>
+            </a>
+
+        {% endfor %}
+    </div> -->
+
+
+    <!-- <div class="container mt-3">        
+        {% for video_type, count in programme.videos_types.items %}
+            <form method="post" action="{% url 'omtv:programme_fiche' %}" style="display:inline-block; margin-bottom: 5px;">
+                {% csrf_token %}
+                <input type="hidden" name="video_type" value="{{ video_type }}">
+                <input type="hidden" name="programme_id" value="{{ programme.id }}">
+                <button type="submit" class="btn btn-primary {% if crit_video_type == video_type %}active{% endif %}"> {{ video_type }} <span class="badge bg-secondary">{{ count }}</span></button>
+            </form>
+        {% endfor %}
+    </div> -->
+
+
+    <!-- <ul>
+    {% for video in programme.videos %}
+        <li>{{video.type}} - {{video.name}}</li>
+    {% endfor %}
+    </ul>
+    -->
+    
+    <iframe class="embed-responsive-item" src="{{ programme.default_video }}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width: 100%; height: auto; aspect-ratio: 16/9; border: none;"></iframe> 
+
+    {% endif %}
 <br>
     
 {% endblock %}

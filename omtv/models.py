@@ -204,24 +204,34 @@ class Programme(models.Model):
 
     @property
     def videos(self):
-        return [{
+        
+        custom_order = {
+            'Trailer': 1,
+            'Teaser': 2,
+            'Clip': 3,
+            'Featurette': 4,
+            'Behind the Scenes': 5
+        }
+
+        lst_videos = [{
             'key': video['key'],
             'name': video['name'],
             'type': video['type']
         } for video in self.json_datas.get('videos', [])]
 
+        # Custom sorting based on the custom_order dictionary
+        lst_videos.sort(key=lambda video: custom_order.get(video['type'], float('inf')))
+
+        return lst_videos
+    
     @property
     def videos_types(self):
-        if not self.json_datas or 'videos' not in self.json_datas:
-            return {}
-
-        video_types = [video['type'] for video in self.json_datas['videos']]
+        video_types = [video['type'] for video in self.videos]
         return dict(Counter(video_types))
     
     @property
     def default_video(self):
-        key = "QFa7ptO3CGs"
-        return f"https://www.youtube.com/embed/{key}"
+        return f"https://www.youtube.com/embed/{self.videos[0]['key']}"
 
 #******************************************************
 # Class Import

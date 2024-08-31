@@ -272,42 +272,6 @@ def programmes(request):
                }
     return render(request, 'omtv/programmes.html', context)
 
-
-def programme_fiche(request):
-    if request.method == 'GET':
-        id = request.GET.get('id', '0')
-
-        programme = get_object_or_404(Programme, id=id)
-
-        # Obtient les programmes du meme jour
-        programmes = get_programmes_on_date(request, programme.pdate)
-        programme_ids = list(programmes.values_list('id', flat=True))
-        try:
-            current_index = programme_ids.index(int(id))
-        except ValueError:
-            current_index = None
-
-        id_prev = programme_ids[-1]
-        id_next = programme_ids[0]
-        if current_index is not None:
-            id_pos = f"{current_index + 1} / {len(programme_ids)}"
-            if current_index > 0: 
-                id_prev = programme_ids[current_index - 1]
-            if current_index < len(programme_ids) - 1: 
-                id_next = programme_ids[current_index + 1]                
-
-
-
-        context = {
-            'programme': programme,
-            'programmes': programmes,
-            'id_pos' : id_pos, 
-            'id_prev' : id_prev, 
-            'id_next' : id_next, 
-            "device" : get_device(request)
-            }
-        return render(request, 'omtv/programme_fiche.html', context)
-
 def get_programmes_on_date(request, dat):
 
     # obtient le filtre pour les channels
@@ -333,5 +297,45 @@ def get_programmes_on_date(request, dat):
     # Filtre les programmes
     return Programme.objects.filter(pdate = dat, start__time__gte='20:00', channel__in=channels).order_by('start', 'channel__sort')
 
+def programme_fiche(request):
+    if request.method == 'POST':
+        id = request.POST.get('programme_id')
+        video_type = request.POST.get('video_type')        
+
+    elif request.method == 'GET':
+        id = request.GET.get('id', '0')
+        video_type = ""
+
+
+    programme = get_object_or_404(Programme, id=id)
+
+    # Obtient les programmes du meme jour
+    programmes = get_programmes_on_date(request, programme.pdate)
+    programme_ids = list(programmes.values_list('id', flat=True))
+    try:
+        current_index = programme_ids.index(int(id))
+    except ValueError:
+        current_index = None
+
+    id_prev = programme_ids[-1]
+    id_next = programme_ids[0]
+    if current_index is not None:
+        id_pos = f"{current_index + 1} / {len(programme_ids)}"
+        if current_index > 0: 
+            id_prev = programme_ids[current_index - 1]
+        if current_index < len(programme_ids) - 1: 
+            id_next = programme_ids[current_index + 1]                
+
+
+
+    context = {
+        'programme': programme,
+        'programmes': programmes,
+        'id_pos' : id_pos, 
+        'id_prev' : id_prev, 
+        'id_next' : id_next,
+        'crit_video_type': video_type
+        }
+    return render(request, 'omtv/programme_fiche.html', context)
 
 
