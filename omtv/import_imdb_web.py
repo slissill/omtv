@@ -34,7 +34,7 @@ def get_json_from_title(title, json_result, light):
 
 
 def get_imdb_movie_id(title):
-    response = requests.get(f'https://api.themoviedb.org/3/search/movie?api_key={IMDB_API_KEY}&query={title}')
+    response = requests.get(f'https://api.themoviedb.org/3/search/movie?api_key={IMDB_API_KEY}&query={title}&language=fr-FR')
     if response.status_code != 200: return -1
     datas = response.json()
     if not datas['results']: return -1
@@ -42,7 +42,7 @@ def get_imdb_movie_id(title):
 
 
 def get_imdb_movie_header(id, light): 
-    response = requests.get(f'https://api.themoviedb.org/3/movie/{id}?api_key={IMDB_API_KEY}')
+    response = requests.get(f'https://api.themoviedb.org/3/movie/{id}?api_key={IMDB_API_KEY}&language=fr-FR')
     if response.status_code != 200: return None
     json_brut = response.json()
     if light:
@@ -64,7 +64,7 @@ def get_imdb_movie_header(id, light):
 
 
 def get_imdb_movie_actors(id, light): 
-    response = requests.get(f'https://api.themoviedb.org/3/movie/{id}/credits?api_key={IMDB_API_KEY}')
+    response = requests.get(f'https://api.themoviedb.org/3/movie/{id}/credits?api_key={IMDB_API_KEY}&language=fr-FR')
     if response.status_code != 200: return None
     json_brut = response.json()
     if light:
@@ -81,7 +81,7 @@ def get_imdb_movie_actors(id, light):
         return json_brut
 
 def get_imdb_movie_videos(id, light): 
-    response = requests.get(f'https://api.themoviedb.org/3/movie/{id}/videos?api_key={IMDB_API_KEY}')
+    response = requests.get(f'https://api.themoviedb.org/3/movie/{id}/videos?api_key={IMDB_API_KEY}&language=fr-FR')
     if response.status_code != 200: return None
     json_brut = response.json()
     if light:

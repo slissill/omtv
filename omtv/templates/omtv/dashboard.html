@@ -22,6 +22,12 @@
 <a href="{% url 'accounts:logout' %}">Déconnexion</a>
 <br> 
 <br> 
+<a href="{% url 'omtv:dashboard' %}?action=drop_dates"> Drop dates from today</a> 
+<br> 
+{% if nbr_suppression %}
+    {{nbr_suppression}} supprimé(s)
+{% endif %}
+<br> 
     {% if last_imports %}
         <h2>10 derniers imports réalisés :</h2>
         <ul>

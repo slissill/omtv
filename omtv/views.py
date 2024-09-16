@@ -45,8 +45,21 @@ def import_xml_data(request):
 
 @login_required
 def dashboard(request):
+
+    action = request.GET.get('action')
+    nbr_suppression = 0  # Variable pour stocker le nombre de suppressions
+    if action:
+        if (action == "drop_dates") :
+            date_to_compare = datetime.today().strftime("%Y-%m-%d")
+            nbr_suppression, _ = Programme.objects.filter(pdate__gte=date_to_compare).delete()  #retourne un tuple
+
     last_imports = Import.objects.all()[:10]
-    return render(request, 'omtv/dashboard.html', {'last_imports' : last_imports})
+
+    context = {        
+        'last_imports' : last_imports,
+        'nbr_suppression': nbr_suppression,
+        }
+    return render(request, 'omtv/dashboard.html', context)
 
 
 
@@ -103,7 +116,6 @@ def get_dates(selected_date):
 
 def old_programmes(request):
     print_request(request)
-
 
     selected_date = datetime.now().date().strftime('%Y%m%d')
     if request.method == "GET":
@@ -331,3 +343,4 @@ def programme_fiche(request):
         'videos_json' : json.dumps(programme.dic_videos)
         }
     return render(request, 'omtv/programme_fiche.html', context)
+
