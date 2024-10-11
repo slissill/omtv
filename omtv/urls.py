@@ -18,6 +18,7 @@ urlpatterns = [
     path('my_carousel/', views.my_carousel, name='my_carousel'),
     path('programmes/', views.programmes, name='programmes'),
     path('programme_fiche/', views.programme_fiche, name='programme_fiche'),
+    path('rapport/', views.rapport, name='rapport'),
 ]
 
 '''

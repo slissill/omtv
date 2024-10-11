@@ -1,0 +1,21 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+{% block title %}Rapport{% endblock %}
+
+{% block page_content %}
+
+
+<h4>{{programmes.count}} films</h4>
+<div class="container">
+    <table>
+        {% for item in programmes %}
+        <tr>
+            <td>{{item.title}}</td>
+            <td>{{item.count}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+    
+{% endblock %}

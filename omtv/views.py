@@ -344,3 +344,7 @@ def programme_fiche(request):
         }
     return render(request, 'omtv/programme_fiche.html', context)
 
+def rapport(request):
+    programmes = Programme.objects.values('title').annotate(count=Count('title')).order_by('-count')    
+    context = {"programmes" : programmes,}
+    return render(request, 'omtv/rapport.html', context)
