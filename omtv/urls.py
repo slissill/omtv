@@ -62,4 +62,11 @@ pip install -r requirements.txt
 python manage.py makemigrations omtv
 
 
+#************************************************************
+#******* Python Anywhere pull ********************************
+#************************************************************
+workon venv
+git pull
+
+
 '''
