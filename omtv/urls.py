@@ -66,6 +66,7 @@ python manage.py makemigrations omtv
 #******* Python Anywhere pull ********************************
 #************************************************************
 workon venv
+cd omtv
 git pull
 
 
