@@ -27,6 +27,9 @@ urlpatterns = [
 ************************************************************
 
 C:\ZDEPOT\VENV\SCRIPTS\activate.ps1
+CD C:\ZDEPOT\omtv\
+python manage.py runserver
+
 
 C:\ZDEPOT\VENV\SCRIPTS\deactivate
 
