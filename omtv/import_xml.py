@@ -44,6 +44,9 @@ def import_xml(min_max_times):
         # print (f"{idx}/{cnt} => {title}")
         # print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
 
+        categories = item.findall("./category")  # Récupère tous les éléments <category>
+        genre = categories[1].text.replace("Film", "") if len(categories) > 1 else ""
+
         start_time = get_xml_date(item.get('start'))
         programme_db, created = Programme.create_or_update(
             channel = Channel.objects.get(pk = item.get('channel')), 
@@ -53,8 +56,8 @@ def import_xml(min_max_times):
                 'pdate'         : start_time.date(),
                 'title'         : title, 
                 'description'   : get_xml_text(item, "desc"),                                
-                'category'      : item.findall("./category")[0].text, 
-                'genre'         : (item.findall("./category")[1].text).replace("Film", ""), 
+                'category'      : categories[0].text if categories else "",
+                'genre'         : genre, 
                 'visuel'        : get_xml_text(item, "icon", "src"),                                    
             }
         )
