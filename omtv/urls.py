@@ -19,6 +19,7 @@ urlpatterns = [
     path('programmes/', views.programmes, name='programmes'),
     path('programme_fiche/', views.programme_fiche, name='programme_fiche'),
     path('rapport/', views.rapport, name='rapport'),
+    path('albums/', views.albums_list, name='albums_list'),
 ]
 
 '''

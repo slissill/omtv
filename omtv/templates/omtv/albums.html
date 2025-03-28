@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Albums d'Éric Clapton</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .album { display: inline-block; margin: 10px; text-align: center; }
+        img { width: 150px; height: 150px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h1>Artiste : XXXXXXX</h1>
+    {% for album in albums %}
+        <div class="album">
+            {% if album.image %}
+                <img src="{{ album.image }}" alt="{{ album.name }}">
+            {% endif %}
+            <p>{{ album.name }}</p>
+        </div>
+    {% endfor %}
+</body>
+</html>
