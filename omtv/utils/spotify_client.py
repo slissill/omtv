@@ -3,6 +3,8 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import os
 
 
+#pip install spotipy
+
 SPOTIFY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
 
