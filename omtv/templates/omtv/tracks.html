@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chansons de l'album</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        table { width: 50%; margin: auto; border-collapse: collapse; }
+        th, td { border: 1px solid black; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Chansons de l'album</h1>
+
+    <pre>{{ tracks }}</pre>
+
+    <table>
+        <tr>
+            <th>Titre</th>
+            <th>Durée</th>
+            <th>Écouter</th>
+        </tr>
+        {% for track in tracks %}
+        <tr>
+            <td>{{ track.name }}</td>
+            <td>{{ track.duration_ms }}</td>
+            <td>
+                {% if track.preview_url %}
+                <audio controls>
+                    <source src="{{ track.preview_url }}" type="audio/mpeg">
+                    Votre navigateur ne supporte pas l'élément audio.
+                </audio>
+                {% else %}
+                    <a href="https://open.spotify.com/track/{{ track.id }}" target="_blank">Écouter sur Spotify 🎵</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>    
+    <a href="javascript:window.history.back();">⬅ Retour aux albums</a>
+</body>
+</html>

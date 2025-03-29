@@ -16,7 +16,7 @@ from django.http import JsonResponse
 from django.conf import settings
 from .queries import *
 import locale
-from .utils.spotify_client import get_albums_by_artist
+from .utils.spotify_client import get_infos_artist, get_tracks_by_album
 
 ###### django_user_agents #################################
 #pip install pyyaml ua-parser user-agents django-user-agents
@@ -350,6 +350,10 @@ def rapport(request):
     context = {"programmes" : programmes,}
     return render(request, 'omtv/rapport.html', context)
 
-def albums_list(request):
-    albums = get_albums_by_artist("laylow")
-    return render(request, "omtv/albums.html", {"albums": albums})
+def albums_list(request, artist):
+    datas = get_infos_artist(artist)    
+    return render(request, "omtv/albums.html", datas)
+
+def album_tracks(request, album_id):
+    tracks = get_tracks_by_album(album_id)
+    return render(request, "omtv/tracks.html", {"tracks": tracks})

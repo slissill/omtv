@@ -4,13 +4,23 @@
 {% block content %}
 
 
+<script>
+  function askArtist() {
+      let artist = prompt("Entrez le nom de l'artiste :", "LAYLOW");
+      if (artist) {
+          window.location.href = "{% url 'omtv:albums_list' 'PLACEHOLDER' %}".replace('PLACEHOLDER', encodeURIComponent(artist));
+      }
+  }
+</script>
+
 <nav class="navbar navbar-expand-sm bg-dark  navbar-dark" >
   <div class="container-fluid">
     <ul class="navbar-nav d-flex flex-row">
 
-      <li class="nav-item"><a class="nav-link me-3" href="{% url 'omtv:programmes' %}"><i class="material-icons">home</i></a></li>
-      <li class="nav-item"><a class="nav-link me-3" href="{% url 'omtv:dashboard' %}"><i class="material-icons">settings</i></a></li>
-      <li class="nav-item"> <a class="nav-link me-3" href="https://www.imdb.com/"> <img width="70px" src="{% static 'omtv/images/TMDB.svg' %}" alt="IMDB" title="IMDB"></a></li>
+      <li class="nav-item"><a class="nav-link me-3"   href="{% url 'omtv:programmes' %}"><i class="material-icons">home</i></a></li>
+      <li class="nav-item"><a class="nav-link me-3"   href="{% url 'omtv:dashboard' %}"><i class="material-icons">settings</i></a></li>
+      <li class="nav-item"> <a class="nav-link me-3"  href="https://www.imdb.com/"> <img width="70px" src="{% static 'omtv/images/TMDB.svg' %}" alt="IMDB" title="IMDB"></a></li>
+      <li class="nav-item"><a class="nav-link me-3" href="#" onclick="askArtist()">Albums de...</a></li>
 
       {% if id_prev or id_next %}
         {% include 'omtv/nav_ids.html' %}

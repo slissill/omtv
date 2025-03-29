@@ -3,21 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Albums d'Éric Clapton</title>
+    <title>Albums de {{ artist.name }}</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; }
         .album { display: inline-block; margin: 10px; text-align: center; }
-        img { width: 150px; height: 150px; border-radius: 8px; }
+        img { width: 150px; height: 150px; border-radius: 8px; }        
+        .album img {transition: transform 0.3s ease-in-out;}
+        .album img:hover {transform: scale(1.1);}
+        .release_date {color: blue;font-size: small;}
+
+
     </style>
 </head>
 <body>
-    <h1>Artiste : XXXXXXX</h1>
+    
+
+    <center>
+        <img src="{{ artist.image }}" alt="{{ artist.name }}">
+    </center>
+    <h1>===== {{ artist.name }} =====</h1>
+    
+
     {% for album in albums %}
         <div class="album">
-            {% if album.image %}
-                <img src="{{ album.image }}" alt="{{ album.name }}">
-            {% endif %}
+
+            <a href="{% url 'omtv:album_tracks' album.id %}"> <!-- Lien vers la page des chansons -->
+                {% if album.image %}
+                    <img src="{{ album.image }}" alt="{{ album.name }}">
+                {% endif %}
+            </a>
             <p>{{ album.name }}</p>
+            <p class="release_date">{{ album.release_date }}</p>
+            <!-- <p style="font-size: xx-small; color: lightgrey;">{{ album.id }}</p> -->
         </div>
     {% endfor %}
 </body>
